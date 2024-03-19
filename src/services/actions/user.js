@@ -48,7 +48,9 @@ export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
 export const CHANGE_PASSWORD_FAILED = 'CHANGE_PASSWORD_FAILED';
 
-
+export const GET_TOKEN = 'GET_TOKEN';
+export const GET_TOKEN_SUCCESS = 'GET_TOKEN_SUCCESS';
+export const GET_TOKEN_FAILED = 'GET_TOKEN_FAILED';
 
 export function register (payload) {
     return function (dispatch) {
@@ -98,6 +100,7 @@ export function login (payload) {
                 }
             })
             .catch(error => {
+                dispatch({type: AUTHORIZATION_FAILED})
                 console.error('Ошибка при авторизации: ', error);
             })
     }
