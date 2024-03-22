@@ -11,7 +11,7 @@ export const refreshToken = () => {
             "Content-Type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-            token: localStorage.getItem("refreshToken"),
+            refreshToken: localStorage.getItem("refreshToken"),
         }),
     })
         .then(checkResponse)
@@ -60,7 +60,7 @@ async function request(url: string, options?: RequestInit | undefined) {
 }
 
 export const fetchForgotPassword = (email: string) => {
-    return request(`auth/request-password-reset`, {
+    return request(`/auth/request-password-reset`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export const fetchGetUserInfo = () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': localStorage.getItem('accessToken') || '',
+            'authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
         },
     })
 }
@@ -124,7 +124,7 @@ export const fetchUpdateUserInfo = (payload: string) => {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': localStorage.getItem('accessToken') || '',
+            'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
         body: payload,
     })
@@ -135,7 +135,7 @@ export const fetchChangePassword = (payload: string) => {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': localStorage.getItem('accessToken') || '',
+            'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
         body: payload,
     })

@@ -9,37 +9,41 @@ import {
     ThemeProvider,
     Typography
 } from "@mui/material";
-import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import {useDispatch, useSelector} from "react-redux";
-import { login } from "../../services/actions/user";
+import { register} from "../../services/actions/user";
 import { useForm } from "../../hooks/form/use-form";
 import { PasswordInput, InputBase } from "../../components/input";
-import {ButtonResetRegister} from "../../components/button/reset-register-buttons";
+import { ButtonSecondaryWithLink} from "../../components/button/reset-register-buttons";
 import {isEmailValid} from "../../services/functions/checkInputs/email";
+import AppRegistrationRoundedIcon from '@mui/icons-material/AppRegistrationRounded';
 
 const defaultTheme = createTheme({
 });
 
-export const LoginPage: FC = () => {
+export const RegisterPage: FC = () => {
     const dispatch = useDispatch();
 
     const { values, handleChange } = useForm<{
         email: string;
         password: string;
+        name: string;
+        username: string;
     }>({
         email: "",
         password: "",
+        name: "",
+        username: "",
     });
 
     // @ts-ignore
-    const authorizationFailed = useSelector((store) => store.userReducer.authorizationFailed)
+    const registerFailed = useSelector((store) => store.userReducer.registerFailed)
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // TODO: remove ts-ignore
         // @ts-ignore
-        if(isEmailValid(values.email)) dispatch(login(JSON.stringify(values)));
+        if (isEmailValid(values.email)) dispatch(register(JSON.stringify(values)));
     };
 
     return (
@@ -55,14 +59,16 @@ export const LoginPage: FC = () => {
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
-                        <LockRoundedIcon />
+                        <AppRegistrationRoundedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Вход
+                        Регистрация
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit}>
-                        <InputBase value={values.email} handleChange={handleChange} flagFailed={authorizationFailed} type="email" label="Почтовый адрес"/>
-                        <PasswordInput value={values.password} helperText="Неверные данные, введите повторно" onChange={handleChange} error={authorizationFailed}/>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ alignItems: "center", }}>
+                        <InputBase value={values.name} handleChange={handleChange} flagFailed={registerFailed} type="name" label="Имя"/>
+                        <InputBase value={values.username} handleChange={handleChange} flagFailed={registerFailed} type="username" label="Псевдоним (никнейм)"/>
+                        <InputBase value={values.email} handleChange={handleChange} flagFailed={registerFailed} type="email" label="Почтовый адрес"/>
+                        <PasswordInput value={values.password} helperText="Такой пользователь уже зарегистрирован, измените никнейм или почту" onChange={handleChange} error={registerFailed}/>
                         <Button
                             type="submit"
                             fullWidth
@@ -70,9 +76,9 @@ export const LoginPage: FC = () => {
                             sx={{ mt: 3, mb: 2 }}
                             size="large"
                         >
-                            Войти
+                            Зарегистрироваться
                         </Button>
-                        <ButtonResetRegister/>
+                        <ButtonSecondaryWithLink value="Вспомнили пароль? Войти" link="/login"/>
                     </Box>
                 </Box>
             </Container>

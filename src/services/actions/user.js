@@ -48,9 +48,6 @@ export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
 export const CHANGE_PASSWORD_FAILED = 'CHANGE_PASSWORD_FAILED';
 
-export const GET_TOKEN = 'GET_TOKEN';
-export const GET_TOKEN_SUCCESS = 'GET_TOKEN_SUCCESS';
-export const GET_TOKEN_FAILED = 'GET_TOKEN_FAILED';
 
 export function register (payload) {
     return function (dispatch) {
@@ -63,7 +60,8 @@ export function register (payload) {
                     dispatch({
                         type: REGISTER_SUCCESS,
                         email: res.user.email,
-                        name: res.user.name
+                        name: res.user.name,
+                        username: res.user.username
                     });
 
                     localStorage.setItem("refreshToken", res.refreshToken);
@@ -89,7 +87,8 @@ export function login (payload) {
                     dispatch({
                         type: AUTHORIZATION_SUCCESS,
                         email: res.user.email,
-                        name: res.user.name
+                        name: res.user.name,
+                        username: res.user.username
                     });
 
                     localStorage.setItem("refreshToken", res.refreshToken);
@@ -137,10 +136,12 @@ export function getUserInfo () {
                 dispatch({
                     type: GET_USER_INFO_SUCCESS,
                     email: res.user.email,
-                    name: res.user.name
+                    name: res.user.name,
+                    username: res.user.username
                 });
             } else {
                 dispatch({type: GET_USER_INFO_FAILED});
+                console.log("User info failed");
             }
         } catch (error) {
             dispatch({type: GET_USER_INFO_FAILED});
@@ -159,7 +160,8 @@ export function updateUserInfo (payload) {
                     dispatch({
                         type: UPDATE_USER_INFO_SUCCESS,
                         email: res.user.email,
-                        name: res.user.name
+                        name: res.user.name,
+                        username: res.user.username
                     })
                 }
                 else{
@@ -172,18 +174,18 @@ export function updateUserInfo (payload) {
 
 export const checkUserAuth = () => {
     return (dispatch) => {
-        dispatch({type: GET_TOKEN});
+        dispatch({type: CHECK_USER_AUTH});
 
         if (localStorage.getItem('accessToken')){
             dispatch(getUserInfo())
                 .catch(() => {
                     localStorage.removeItem("refreshToken");
                     localStorage.removeItem("accessToken");
-                    dispatch({type: GET_TOKEN_FAILED});
+                    dispatch({type: CHECK_USER_AUTH_FAILED});
                 })
-                .finally(() => {dispatch({type: GET_TOKEN_SUCCESS});});
+                .finally(() => {dispatch({type: CHECK_USER_AUTH_SUCCESS});});
         } else {
-            dispatch({type: GET_TOKEN_SUCCESS});
+            dispatch({type: CHECK_USER_AUTH_SUCCESS});
         }
     }
 }

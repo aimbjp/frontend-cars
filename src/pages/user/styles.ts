@@ -8,5 +8,5 @@ export const StyledLink = styled(Link)(({ theme }) => ({
         color: theme.palette.secondary.light,
         textDecoration: "underline",
     },
-    fontSize: "12px",
+    fontSize: "16px",
 }));
