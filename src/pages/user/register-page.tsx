@@ -9,13 +9,13 @@ import {
     ThemeProvider,
     Typography
 } from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import { register} from "../../services/actions/user";
+import { register} from "../../services/thunks/user";
 import { useForm } from "../../hooks/form/use-form";
 import { PasswordInput, InputBase } from "../../components/input";
 import { ButtonSecondaryWithLink} from "../../components/button/reset-register-buttons";
 import {isEmailValid} from "../../services/functions/checkInputs/email";
 import AppRegistrationRoundedIcon from '@mui/icons-material/AppRegistrationRounded';
+import {useDispatch, useSelector} from "../../services/hooks";
 
 const defaultTheme = createTheme({
 });
@@ -35,15 +35,12 @@ export const RegisterPage: FC = () => {
         username: "",
     });
 
-    // @ts-ignore
     const registerFailed = useSelector((store) => store.userReducer.registerFailed)
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // TODO: remove ts-ignore
-        // @ts-ignore
-        if (isEmailValid(values.email)) dispatch(register(JSON.stringify(values)));
+        if (isEmailValid(values.email)) dispatch(register(values));
     };
 
     return (

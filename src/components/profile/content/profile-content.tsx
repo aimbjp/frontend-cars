@@ -1,16 +1,12 @@
 import { FC, FormEvent, useRef, useEffect, useState } from "react";
 import { Button, Stack, TextField, IconButton, InputAdornment } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "../../../hooks/form/use-form";
-import { getUserInfo, updateUserInfo } from "../../../services/actions/user";
+import {useDispatch, useSelector} from "../../../services/hooks";
+import {getUserInfo, updateUserInfo} from "../../../services/thunks/user";
+import {IProfileForm} from "../../../type/user/user-types";
 
-interface IProfileForm {
-    email?: string;
-    name?: string;
-    password?: string;
-    username?: string;
-}
+
 
 export const ProfileContent: FC = () => {
     const dispatch = useDispatch();
@@ -22,9 +18,9 @@ export const ProfileContent: FC = () => {
     });
     const [hasChanges, setHasChanges] = useState<boolean>(false);
 
-    const email = useSelector((store: any) => store.userReducer.user.email);
-    const name = useSelector((store: any) => store.userReducer.user.name);
-    const username = useSelector((store: any) => store.userReducer.user.username);
+    const email = useSelector((store) => store.userReducer.user.email);
+    const name = useSelector((store) => store.userReducer.user.name);
+    const username = useSelector((store) => store.userReducer.user.username);
 
     const { values, handleChange, setValues } = useForm<IProfileForm>({
         email: email,
@@ -34,9 +30,7 @@ export const ProfileContent: FC = () => {
     });
 
     useEffect(() => {
-        // @ts-ignore
         dispatch(getUserInfo())
-            .catch((e: any) => { console.error(e); });
     }, [dispatch]);
 
     useEffect(() => {
@@ -64,8 +58,7 @@ export const ProfileContent: FC = () => {
         }
 
         if (Object.keys(changedValues).length > 0) {
-            // @ts-ignore
-            dispatch(updateUserInfo(JSON.stringify(changedValues)));
+            dispatch(updateUserInfo(changedValues));
             setValues((prevValues: typeof values) => ({ ...prevValues, password: '' }));
         }
     }

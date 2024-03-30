@@ -1,13 +1,12 @@
 import { FC, } from "react";
 import {
     Button,
-    Container,
     Grid
 } from "@mui/material";
-import {useDispatch, } from "react-redux";
-import { logout, } from "../../../services/actions/user";
 import {styled} from "@mui/system";
 import {NavLink, useLocation} from "react-router-dom";
+import {logout} from "../../../services/thunks/user";
+import {useDispatch} from "../../../services/hooks";
 
 
 
@@ -22,9 +21,7 @@ export const ProfileNavigation: FC = () => {
     const location = useLocation();
 
     const handleExit = () => {
-        //TODO: When storage typed
-        // @ts-ignore
-        dispatch(logout(JSON.stringify({refreshToken: localStorage.getItem("refreshToken")})));
+        dispatch(logout({refreshToken: localStorage.getItem("refreshToken") || ''}));
     }
 
     return (

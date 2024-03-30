@@ -10,12 +10,13 @@ import {
     Typography
 } from "@mui/material";
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
-import {useDispatch, useSelector} from "react-redux";
-import { login } from "../../services/actions/user";
+import { login } from "../../services/thunks/user";
 import { useForm } from "../../hooks/form/use-form";
 import { PasswordInput, InputBase } from "../../components/input";
 import {ButtonResetRegister} from "../../components/button/reset-register-buttons";
 import {isEmailValid} from "../../services/functions/checkInputs/email";
+import {useDispatch, useSelector} from "../../services/hooks";
+import {CHECK_EMAIL_EXIST_SUCCESS} from "../../services/action-types/user";
 
 const defaultTheme = createTheme({
 });
@@ -31,15 +32,14 @@ export const LoginPage: FC = () => {
         password: "",
     });
 
-    // @ts-ignore
     const authorizationFailed = useSelector((store) => store.userReducer.authorizationFailed)
+
+
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // TODO: remove ts-ignore
-        // @ts-ignore
-        if(isEmailValid(values.email)) dispatch(login(JSON.stringify(values)));
+        if(isEmailValid(values.email)) dispatch(login(values));
     };
 
     return (

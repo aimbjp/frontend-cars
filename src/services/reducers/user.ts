@@ -27,14 +27,51 @@ import {
     CHECK_USER_AUTH_FAILED,
     CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD, CHANGE_PASSWORD_FAILED,
 
-} from "../actions/user";
+} from "../action-types/user";
+import {TActionUserType} from "../types/user";
+import {IUser} from "../../type/user/user-types";
 
-const initialState = {
+interface IInitialState {
+    user: IUser;
+
+    register: boolean;
+    registerFailed: boolean;
+
+    authorization: boolean;
+    authorizationFailed: boolean;
+
+    logout: boolean;
+    logoutFailed: boolean;
+
+    getUserInfo: boolean;
+    getUserInfoFailed: boolean;
+
+    updateUser: boolean;
+    updateUserFailed: boolean;
+
+    token: boolean;
+    tokenFailed: boolean;
+    tokenChecked: boolean;
+
+    resetPassword: boolean;
+    resetPasswordFailed: boolean;
+    resetPasswordSuccess: boolean;
+    resetPasswordEnd: boolean;
+
+    checkEmailExist: boolean;
+    checkEmailExistFailed: boolean;
+
+    emailChecked: boolean;
+
+    changePassword: boolean;
+    changePasswordFailed: boolean;
+}
+
+const initialState: IInitialState = {
     user: {
         email: '',
         name: '',
         username: '',
-
     },
 
     register: false,
@@ -70,7 +107,7 @@ const initialState = {
     changePasswordFailed: false,
 };
 
-export function userReducer (state = initialState, action)  {
+export function userReducer (state = initialState, action: TActionUserType)  {
     switch (action.type) {
         case REGISTER: {
             return {...state, register: true};
@@ -87,7 +124,7 @@ export function userReducer (state = initialState, action)  {
                 ...state,
                 register: false,
                 registerFailed: false,
-                user: { email: action.email, name: action.name, }
+                user: { email: action.email, name: action.name, username: action.username}
             }
         }
 

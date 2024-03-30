@@ -10,12 +10,13 @@ import {
     Typography
 } from "@mui/material";
 import LockResetRoundedIcon from "@mui/icons-material/LockOutlined";
-import {useDispatch, useSelector} from "react-redux";
-import {checkEmailExist} from "../../services/actions/user";
 import { useForm } from "../../hooks/form/use-form";
 import { InputBase } from "../../components/input";
 import { ButtonSecondaryWithLink} from "../../components/button/reset-register-buttons";
 import { isEmailValid} from "../../services/functions/checkInputs/email";
+import {useDispatch, useSelector} from "../../services/hooks";
+import {checkEmailExist} from "../../services/thunks/user";
+import {IForgotPassword} from "../../type/user/user-types";
 
 const defaultTheme = createTheme({
 });
@@ -23,21 +24,16 @@ const defaultTheme = createTheme({
 export const ForgotPasswordPage: FC = () => {
     const dispatch = useDispatch();
 
-    const { values, handleChange } = useForm<{
-        email: string;
-    }>({
+    const { values, handleChange } = useForm<IForgotPassword>({
         email: "",
     });
 
-    // @ts-ignore
     const isEmailExist = useSelector((store) => store.userReducer.checkEmailExistFailed)
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // TODO: remove ts-ignore
-        // @ts-ignore
-        if(isEmailValid(values.email)) dispatch(checkEmailExist(JSON.stringify(values)));
+        if(isEmailValid(values.email)) dispatch(checkEmailExist(values));
     };
 
     return (

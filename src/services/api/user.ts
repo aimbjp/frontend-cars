@@ -1,4 +1,7 @@
+import {IForgotPassword, ILogin, ILogout, IProfileForm, IRegister, IResetPassword} from "../../type/user/user-types";
 const URL_API = 'http://localhost:3000/api';
+
+// const URL_API = '/api';
 
 const checkResponse = (res: Response): Promise<any> => {
     return res.ok ? res.json() : res.json().then((err: any) => Promise.reject(err));
@@ -59,53 +62,53 @@ async function request(url: string, options?: RequestInit | undefined) {
     }
 }
 
-export const fetchForgotPassword = (email: string) => {
+export const fetchForgotPassword = (email: IForgotPassword) => {
     return request(`/auth/request-password-reset`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: email,
+        body: JSON.stringify(email),
     })
 }
 
-export const fetchResetPassword = (payload: string) => {
+export const fetchResetPassword = (payload: IResetPassword) => {
     return request(`/auth/reset-password`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: payload,
+        body: JSON.stringify(payload),
     })
 }
 
-export const fetchRegister = (payload: string) => {
+export const fetchRegister = (payload: IRegister) => {
     return request(`/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: payload,
+        body: JSON.stringify(payload),
     })
 }
 
-export const fetchLogin = (payload: string) => {
+export const fetchLogin = (payload: ILogin) => {
     return request(`/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: payload,
+        body: JSON.stringify(payload),
     })
 }
 
-export const fetchLogout = (payload: string) => {
+export const fetchLogout = (payload: ILogout) => {
     return request(`/auth/logout`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: payload,
+        body: JSON.stringify(payload),
     })
 }
 
@@ -119,24 +122,23 @@ export const fetchGetUserInfo = () => {
     })
 }
 
-export const fetchUpdateUserInfo = (payload: string) => {
+export const fetchUpdateUserInfo = (payload: IProfileForm) => {
     return request(`/user`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
-        body: payload,
+        body: JSON.stringify(payload),
     })
 }
 
-export const fetchChangePassword = (payload: string) => {
+export const fetchChangePassword = () => {
     return request(`/user/change-password`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
-        body: payload,
     })
 }

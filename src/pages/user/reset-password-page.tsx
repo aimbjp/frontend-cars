@@ -1,4 +1,4 @@
-import {FC, FormEvent, SyntheticEvent, useState} from "react";
+import {FC, FormEvent, SyntheticEvent, useEffect, useState} from "react";
 import {
     Avatar,
     Box,
@@ -10,50 +10,64 @@ import {
     Typography
 } from "@mui/material";
 import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
-import {useDispatch, } from "react-redux";
-import {changeForgotPasswordEmail, remindPassword, resetPassword} from "../../services/actions/user";
 import { useForm } from "../../hooks/form/use-form";
 import { PasswordInput, InputBase } from "../../components/input";
 import {
     ButtonSecondary,
 } from "../../components/button/reset-register-buttons";
+import {useDispatch} from "../../services/hooks";
+import {changeForgotPasswordEmail, remindPassword, resetPassword} from "../../services/thunks/user";
+import {IResetPassword} from "../../type/user/user-types";
+import { useNavigate, useParams} from "react-router-dom";
+import {CHECK_EMAIL_EXIST_SUCCESS} from "../../services/action-types/user";
 
 const defaultTheme = createTheme({
 });
 
 export const ResetPasswordPage: FC = () => {
     const dispatch = useDispatch();
+    const {token} = useParams();
+    const navigate = useNavigate();
+
 
     const [errorToken, setErrorToken] = useState<string>('')
     const [flag, setFlag] = useState<boolean>(false)
 
-    const {values, handleChange} = useForm<{password: string, token: string}>({password: "", token: ""});
+    const {values, handleChange} = useForm<IResetPassword>({password: "", token: token || ""});
+
+    // useEffect(() => {
+    //     if (token) dispatch({type: CHECK_EMAIL_EXIST_SUCCESS});
+    // }, [token])
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const payload = JSON.stringify(values);
+        const payload = (values);
 
-        //TODO: When storage typed
-        // @ts-ignore
         dispatch(resetPassword(payload, setErrorToken, setFlag));
-
     }
+
 
     const handleChangeEmail = (e: SyntheticEvent<Element, Event>) => {
         e.preventDefault();
+        if (token) {
+            navigate('/forgot-password');
+            dispatch(changeForgotPasswordEmail());
 
-        //TODO: When storage typed
-        // @ts-ignore
-        dispatch(changeForgotPasswordEmail());
+        } else {
+            dispatch(changeForgotPasswordEmail());
+        }
     }
 
     function handleRemindPassword(e: SyntheticEvent<Element, Event>) {
         e.preventDefault();
+        if (token) {
+            navigate('/login');
+            dispatch(remindPassword());
 
-        //TODO: When storage typed
-        // @ts-ignore
-        dispatch(remindPassword());
+        } else {
+            dispatch(remindPassword());
+        }
     }
 
     return (
@@ -86,7 +100,6 @@ export const ResetPasswordPage: FC = () => {
                         >
                             Восстановить
                         </Button>
-                        {/*TODO: add onCLick handleChangeEmail, handleRemindPassword*/}
                         <ButtonSecondary value={"Кажется в почту закралась опечатка? Назад"} onClick={handleChangeEmail}/>
                         <ButtonSecondary value={"Вспомнили пароль? Войти"} onClick={handleRemindPassword}/>
                     </Box>
