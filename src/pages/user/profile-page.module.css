@@ -1,0 +1,24 @@
+.profileContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.menuButton {
+    margin-bottom: 10px;
+}
+
+.profileContent {
+    width: 70%;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
