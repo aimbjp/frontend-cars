@@ -24,7 +24,7 @@ import {
     CHECK_EMAIL_EXIST_SUCCESS,
     CHECK_EMAIL_EXIST_FAILED,
     CHANGE_FORGOT_PASSWORD_EMAIL,
-    REMIND_PASSWORD, CHANGE_PASSWORD, CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD_FAILED
+    REMIND_PASSWORD, CHANGE_PASSWORD, CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD_FAILED, CHANGE_PASSWORD_RELOAD
 } from "../action-types/user";
 
 
@@ -140,6 +140,10 @@ export interface IChangePasswordFailedAction {
     readonly type: typeof CHANGE_PASSWORD_FAILED;
 }
 
+export interface IChangePasswordReloadAction {
+    readonly type: typeof CHANGE_PASSWORD_RELOAD;
+}
+
 export type TActionUserType =
     | ICheckUserAuthAction
     | ICheckUserAuthSuccessAction
@@ -169,5 +173,6 @@ export type TActionUserType =
     | IRemindPasswordAction
     | IChangePasswordAction
     | IChangePasswordFailedAction
-    | IChangePasswordSuccessAction ;
+    | IChangePasswordSuccessAction
+    | IChangePasswordReloadAction;
 
