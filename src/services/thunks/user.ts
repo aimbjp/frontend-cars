@@ -291,7 +291,15 @@ import {
     CHANGE_PASSWORD_SUCCESS
 } from "../action-types/user";
 import {AppDispatch, AppThunkAction} from "../types";
-import {IForgotPassword, ILogin, ILogout, IProfileForm, IRegister, IResetPassword} from "../../type/user/user-types";
+import {
+    IChangePassword,
+    IForgotPassword,
+    ILogin,
+    ILogout,
+    IProfileForm,
+    IRegister,
+    IResetPassword
+} from "../../type/user/user-types";
 
 
 
@@ -493,11 +501,11 @@ export const remindPassword = (): AppThunkAction => {
     }
 }
 
-export const changePassword = (): AppThunkAction => {
+export const changePassword = (payload: IChangePassword): AppThunkAction => {
     return (dispatch: AppDispatch) => {
         dispatch({type: CHANGE_PASSWORD})
 
-        fetchChangePassword()
+        fetchChangePassword(payload)
             .then(res => {
                 if ( res.success) {
                     dispatch({type: CHANGE_PASSWORD_SUCCESS});

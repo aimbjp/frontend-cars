@@ -1,65 +1,56 @@
 import { FC, FormEvent, useRef, useEffect, useState } from "react";
 import { Button, Stack, TextField, IconButton, InputAdornment } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import { useForm } from "../../../hooks/form/use-form";
-import {useDispatch, useSelector} from "../../../services/hooks";
-import {getUserInfo, updateUserInfo} from "../../../services/thunks/user";
-import {IProfileForm} from "../../../type/user/user-types";
+import { useForm } from "../../../../hooks/form/use-form";
+import {useDispatch, useSelector} from "../../../../services/hooks";
+import {getUserInfo, updateUserInfo} from "../../../../services/thunks/user";
+import {IProfileForm} from "../../../../type/user/user-types";
 
 
 
-export const ProfileContent: FC = () => {
+export const UserInfoForm: FC = () => {
     const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({
         email: false,
         name: false,
-        password: false,
         username: false,
     });
     const [hasChanges, setHasChanges] = useState<boolean>(false);
 
-    const email = useSelector((store) => store.userReducer.user.email);
-    const name = useSelector((store) => store.userReducer.user.name);
-    const username = useSelector((store) => store.userReducer.user.username);
+    const { email, name, username } = useSelector((store) => store.userReducer.user);
 
-    const { values, handleChange, setValues } = useForm<IProfileForm>({
+    const initialStateForForm: IProfileForm = {
         email: email,
         name: name,
-        password: '',
         username: username,
-    });
+    };
+
+    const { values, handleChange, setValues } = useForm<IProfileForm>(initialStateForForm);
 
     useEffect(() => {
         dispatch(getUserInfo())
     }, [dispatch]);
 
     useEffect(() => {
-        if (email !== values.email || name !== values.name) {
-            setValues((prevValues: typeof values) => ({ ...prevValues, email: email, name: name }));
+        if (email !== values.email || name !== values.name || username !== values.username) {
+            setValues((prevValues: typeof values) => ({ ...prevValues, email: email, name: name, username: username }));
         }
-    }, [email, name]);
+    }, [email, name, username]);
 
     const handleProfile = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const changedValues: IProfileForm = {};
-
-        if (values.email !== email) {
-            changedValues.email = values.email;
-        }
-        if (values.name !== name) {
-            changedValues.name = values.name;
-        }
-        if (values.username !== username) {
-            changedValues.username = values.username;
-        }
-        if (values.password !== '') {
-            changedValues.password = values.password;
-        }
+        const changedValues: IProfileForm = (Object.keys(values) as Array<keyof typeof values>)
+            .reduce((acc, key) => {
+            if (values[key] !== initialStateForForm[key]) {
+                acc[key] = values[key];
+            }
+            return acc;
+        }, {} as IProfileForm);
 
         if (Object.keys(changedValues).length > 0) {
             dispatch(updateUserInfo(changedValues));
-            setValues((prevValues: typeof values) => ({ ...prevValues, password: '' }));
+            setValues((prevValues: typeof values) => ({ ...prevValues }));
         }
     }
 
@@ -83,12 +74,14 @@ export const ProfileContent: FC = () => {
     };
 
     const handleCancel = () => {
-        setValues((prevValues: typeof values) => ({ ...prevValues, email: email, name: name, username: username, password: '' }));
+        setValues((prevValues: typeof values) => (initialStateForForm));
     }
 
     useEffect(() => {
-        setHasChanges(!(email === values.email && name === values.name && username === values.username && '' === values.password));
-    }, [values.email, values.name, values.password, handleProfile, values.username]);
+        const hasChanges = (Object.keys(values) as Array<keyof typeof values>)
+            .some(key => values[key] !== initialStateForForm[key]);
+        setHasChanges(hasChanges);
+    }, [values, initialStateForForm]);
 
     return (
         <form name="changeProfile" onSubmit={handleProfile}>
@@ -179,6 +172,6 @@ export const ProfileContent: FC = () => {
     );
 };
 
-export default ProfileContent;
+export default UserInfoForm;
 
 

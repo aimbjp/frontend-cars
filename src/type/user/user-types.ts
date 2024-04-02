@@ -32,9 +32,16 @@ export interface IForgotPassword {
     email: string;
 }
 
+export interface IChangePassword {
+    oldPassword: string;
+    newPassword: string;
+}
+
 export interface IProfileForm {
     email?: string;
     name?: string;
-    password?: string;
+    oldPassword?: string;
     username?: string;
+    newPassword?: string;
 }
+

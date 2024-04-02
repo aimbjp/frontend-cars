@@ -63,7 +63,7 @@ interface IInitialState {
 
     emailChecked: boolean;
 
-    changePassword: boolean;
+    changePasswordLoading: boolean;
     changePasswordFailed: boolean;
 }
 
@@ -103,7 +103,7 @@ const initialState: IInitialState = {
 
     emailChecked: false,
 
-    changePassword: false,
+    changePasswordLoading: false,
     changePasswordFailed: false,
 };
 
@@ -232,13 +232,13 @@ export function userReducer (state = initialState, action: TActionUserType)  {
         }
 
         case CHANGE_PASSWORD: {
-            return {...state, changePassword: true}
+            return {...state, changePasswordLoading: true}
         }
         case CHANGE_PASSWORD_FAILED: {
-            return {...state, changePasswordFailed: true, changePassword: false}
+            return {...state, changePasswordFailed: true, changePasswordLoading: false}
         }
         case CHANGE_PASSWORD_SUCCESS: {
-            return {...state, changePasswordFailed: false, changePassword: false}
+            return {...state, changePasswordFailed: false, changePasswordLoading: false}
         }
 
 

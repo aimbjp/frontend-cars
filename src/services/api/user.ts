@@ -1,7 +1,15 @@
-import {IForgotPassword, ILogin, ILogout, IProfileForm, IRegister, IResetPassword} from "../../type/user/user-types";
-const URL_API = 'http://localhost:3000/api';
+import {
+    IChangePassword,
+    IForgotPassword,
+    ILogin,
+    ILogout,
+    IProfileForm,
+    IRegister,
+    IResetPassword
+} from "../../type/user/user-types";
+// const URL_API = 'http://localhost:3000/api';
 
-// const URL_API = '/api';
+const URL_API = '/api';
 
 const checkResponse = (res: Response): Promise<any> => {
     return res.ok ? res.json() : res.json().then((err: any) => Promise.reject(err));
@@ -133,12 +141,13 @@ export const fetchUpdateUserInfo = (payload: IProfileForm) => {
     })
 }
 
-export const fetchChangePassword = () => {
+export const fetchChangePassword = (payload: IChangePassword) => {
     return request(`/user/change-password`, {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
+        body: JSON.stringify(payload),
     })
 }
