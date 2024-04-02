@@ -1,11 +1,13 @@
-import { FC, ReactElement } from "react";
+import {FC, ReactElement, useState} from "react";
 import {
+    Box,
     Container,
     createTheme,
-    CssBaseline, Grid,
+    CssBaseline, Grid, Hidden, IconButton,
     ThemeProvider,
 } from "@mui/material";
 import { ProfileNavigation} from "../../components/profile/navigation/profile-navigation";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const defaultTheme = createTheme({
 });
@@ -18,19 +20,16 @@ export const ProfilePage: FC<IProfilePage> = ({element}) => {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Container component="main" sx={{ mt:9 }}>
+            <Container sx={{ mt: 9 }}>
                 <CssBaseline />
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-around"
-                    alignItems="center"
-                >
-                    <Grid item xs={2}>
-                        <ProfileNavigation />
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={4}>
+                            <ProfileNavigation />
                     </Grid>
-                    <Grid item xs={6}>
-                        {element}
+                    <Grid item xs={12} md={8}>
+                        <Box>
+                            {element}
+                        </Box>
                     </Grid>
                 </Grid>
             </Container>

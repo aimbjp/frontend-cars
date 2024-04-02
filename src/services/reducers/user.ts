@@ -25,7 +25,7 @@ import {
     CHECK_USER_AUTH,
     CHECK_USER_AUTH_SUCCESS,
     CHECK_USER_AUTH_FAILED,
-    CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD, CHANGE_PASSWORD_FAILED,
+    CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD, CHANGE_PASSWORD_FAILED, CHANGE_PASSWORD_RELOAD,
 
 } from "../action-types/user";
 import {TActionUserType} from "../types/user";
@@ -65,6 +65,7 @@ interface IInitialState {
 
     changePasswordLoading: boolean;
     changePasswordFailed: boolean;
+    changePasswordSuccess: boolean;
 }
 
 const initialState: IInitialState = {
@@ -105,6 +106,7 @@ const initialState: IInitialState = {
 
     changePasswordLoading: false,
     changePasswordFailed: false,
+    changePasswordSuccess: false,
 };
 
 export function userReducer (state = initialState, action: TActionUserType)  {
@@ -238,7 +240,10 @@ export function userReducer (state = initialState, action: TActionUserType)  {
             return {...state, changePasswordFailed: true, changePasswordLoading: false}
         }
         case CHANGE_PASSWORD_SUCCESS: {
-            return {...state, changePasswordFailed: false, changePasswordLoading: false}
+            return {...state, changePasswordFailed: false, changePasswordLoading: false, changePasswordSuccess: true}
+        }
+        case CHANGE_PASSWORD_RELOAD: {
+            return {...state, changePasswordFailed: false, changePasswordLoading: false, changePasswordSuccess: false}
         }
 
 

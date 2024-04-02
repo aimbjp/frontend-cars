@@ -354,6 +354,7 @@ export function login (payload: ILogin): AppThunkAction {
             })
             .catch(error => {
                 console.error('Ошибка при авторизации: ', error);
+                dispatch({type: AUTHORIZATION_FAILED});
             })
     }
 }
@@ -375,6 +376,7 @@ export function logout(payload: ILogout): AppThunkAction {
             })
             .catch(error => {
                 console.error('Ошибка при авторизации: ', error);
+                dispatch({type: LOGOUT_FAILED});
             })
     }
 }

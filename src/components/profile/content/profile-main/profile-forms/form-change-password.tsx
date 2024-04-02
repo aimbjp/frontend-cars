@@ -1,10 +1,11 @@
-import { FC, FormEvent, useState, useEffect, useRef } from 'react';
-import { TextField, Button, Stack, InputAdornment, IconButton, CircularProgress } from '@mui/material';
-import { useDispatch, useSelector } from "../../../../../services/hooks";
-import { IChangePassword } from "../../../../../type/user/user-types";
-import { useForm } from "../../../../../hooks/form/use-form";
-import { changePassword } from "../../../../../services/thunks/user";
+import {FC, FormEvent, useEffect, useRef, useState} from 'react';
+import {Box, Button, CircularProgress, IconButton, InputAdornment, Stack, TextField} from '@mui/material';
+import {useDispatch, useSelector} from "../../../../../services/hooks";
+import {IChangePassword} from "../../../../../type/user/user-types";
+import {useForm} from "../../../../../hooks/form/use-form";
+import {changePassword} from "../../../../../services/thunks/user";
 import EditIcon from "@mui/icons-material/Edit";
+import {CHANGE_PASSWORD_RELOAD} from "../../../../../services/action-types/user";
 
 const ChangePasswordForm: FC = () => {
     const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const ChangePasswordForm: FC = () => {
         newPassword: false,
     });
 
-    const { changePasswordFailed, changePasswordLoading } = useSelector(store => store.userReducer);
+    const { changePasswordFailed, changePasswordLoading, changePasswordSuccess } = useSelector(store => store.userReducer);
 
     const initialStateForForm: IChangePassword = {
         oldPassword: '',
@@ -49,87 +50,102 @@ const ChangePasswordForm: FC = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         dispatch(changePassword(values));
-        if (!changePasswordFailed && !changePasswordLoading && passwordFieldsVisible) {
+    }
+
+    useEffect(() => {
+        if (changePasswordSuccess) {
             handleCancel();
+            dispatch({type: CHANGE_PASSWORD_RELOAD});
         }
-    };
+    }, [changePasswordSuccess]);
 
     const togglePasswordFields = () => {
         setPasswordFieldsVisible(prev => !prev);
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ marginTop: '3vh' }}>
-            <Stack spacing={2}>
-                <Button variant="contained" onClick={togglePasswordFields} sx={{ width: 'fit-content' }} >
-                    {(passwordFieldsVisible ? 'Отменить' : 'Изменить пароль')}
-                </Button>
+        <Box mt="3vh" mx="auto" maxWidth="400px">
+            <form onSubmit={handleSubmit}>
+                <Stack spacing={2}>
+                    <Button variant="contained" onClick={togglePasswordFields} sx={{ width: 'fit-content' }}>
+                        {(passwordFieldsVisible ? 'Отменить' : 'Изменить пароль')}
+                    </Button>
 
-                {passwordFieldsVisible && changePasswordLoading ? <CircularProgress size={24} /> : passwordFieldsVisible && (
-                    <>
-                        <TextField
-                            type="oldPassword"
-                            label="Старый пароль"
-                            placeholder="Старый пароль"
-                            onChange={handleChange}
-                            value={values.oldPassword}
-                            name="oldPassword"
-                            disabled={!isEditing.oldPassword}
-                            onBlur={() => handleBlur('oldPassword')}
-                            error={changePasswordFailed && !changePasswordLoading}
-                            helperText={changePasswordFailed && !changePasswordLoading ? 'Старый пароль неверный' : ''}
-                            required
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            edge="end"
-                                            onClick={() => handleEdit('oldPassword')}
-                                            aria-label="toggle edit"
-                                        >
-                                            <EditIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                            inputRef={(ref: HTMLInputElement) => inputRefs.current['oldPassword'] = ref}
-                        />
+                    {passwordFieldsVisible && changePasswordLoading ? (
+                        <Box display="flex" justifyContent="center">
+                            <CircularProgress size={24} />
+                        </Box>
+                    ) : passwordFieldsVisible && (
+                        <Box>
+                            <TextField
+                                type="oldPassword"
+                                label="Старый пароль"
+                                placeholder="Старый пароль"
+                                onChange={handleChange}
+                                value={values.oldPassword}
+                                name="oldPassword"
+                                disabled={!isEditing.oldPassword}
+                                onBlur={() => handleBlur('oldPassword')}
+                                error={changePasswordFailed && !changePasswordLoading}
+                                helperText={changePasswordFailed && !changePasswordLoading ? 'Старый пароль неверный' : ''}
+                                required
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                edge="end"
+                                                onClick={() => handleEdit('oldPassword')}
+                                                aria-label="toggle edit"
+                                            >
+                                                <EditIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                inputRef={(ref: HTMLInputElement) => inputRefs.current['oldPassword'] = ref}
+                            />
 
-                        <TextField
-                            type="newPassword"
-                            label="Новый пароль"
-                            placeholder="Новый пароль"
-                            onChange={handleChange}
-                            value={values.newPassword}
-                            name="newPassword"
-                            disabled={!isEditing.newPassword}
-                            onBlur={() => handleBlur('newPassword')}
-                            required
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            edge="end"
-                                            onClick={() => handleEdit('newPassword')}
-                                            aria-label="toggle edit"
-                                        >
-                                            <EditIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                            inputRef={(ref: HTMLInputElement) => inputRefs.current['newPassword'] = ref}
-                        />
+                            <TextField
+                                type="newPassword"
+                                label="Новый пароль"
+                                placeholder="Новый пароль"
+                                onChange={handleChange}
+                                value={values.newPassword}
+                                name="newPassword"
+                                disabled={!isEditing.newPassword}
+                                onBlur={() => handleBlur('newPassword')}
+                                required
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                edge="end"
+                                                onClick={() => handleEdit('newPassword')}
+                                                aria-label="toggle edit"
+                                            >
+                                                <EditIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                inputRef={(ref: HTMLInputElement) => inputRefs.current['newPassword'] = ref}
+                            />
 
-                        <Stack direction="row" spacing={2}>
-                            <Button type="submit" variant="contained">Сохранить пароль</Button>
-                            <Button variant="outlined" onClick={handleCancel}>Отменить</Button>
-                        </Stack>
-                    </>
-                )}
-            </Stack>
-        </form>
+                            <Stack direction="row" spacing={2}>
+                                <Button type="submit" variant="contained" sx={{ backgroundColor: '#007bff', color: '#ffffff', borderRadius: '10px' }}>
+                                    Сохранить пароль
+                                </Button>
+                                <Button variant="outlined" onClick={handleCancel} sx={{ borderColor: '#007bff', color: '#007bff', borderRadius: '10px' }}>
+                                    Отменить
+                                </Button>
+                            </Stack>
+                        </Box>
+                    )}
+                </Stack>
+            </form>
+        </Box>
     );
 };
 

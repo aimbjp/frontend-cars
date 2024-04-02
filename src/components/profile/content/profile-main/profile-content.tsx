@@ -1,5 +1,5 @@
 import { FC, FormEvent, useRef, useEffect, useState } from "react";
-import { Button, Stack, TextField, IconButton, InputAdornment } from "@mui/material";
+import {Button, Stack, TextField, IconButton, InputAdornment, Box} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useForm } from "../../../../hooks/form/use-form";
 import {useDispatch, useSelector} from "../../../../services/hooks";
@@ -84,6 +84,8 @@ export const UserInfoForm: FC = () => {
     }, [values, initialStateForForm]);
 
     return (
+        <Box mt="3vh" mx="auto" maxWidth="400px">
+
         <form name="changeProfile" onSubmit={handleProfile}>
             <Stack spacing={2} sx={{ marginLeft: '5vw' }}>
                 <TextField
@@ -159,16 +161,17 @@ export const UserInfoForm: FC = () => {
                 />
                 {hasChanges && (
                     <Stack direction="row" spacing={2}>
-                        <Button variant="outlined" onClick={handleCancel}>
+                        <Button variant="outlined" onClick={handleCancel} sx={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000', border: '1px solid #000000' }}>
                             Отменить
                         </Button>
-                        <Button variant="contained" type="submit">
+                        <Button variant="contained" type="submit" sx={{ borderRadius: '20px', backgroundColor: '#000000', color: '#ffffff', width: 'fit-content' }}>
                             Сохранить
                         </Button>
                     </Stack>
                 )}
             </Stack>
         </form>
+        </Box>
     );
 };
 
