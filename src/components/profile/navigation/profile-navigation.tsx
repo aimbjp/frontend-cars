@@ -77,6 +77,15 @@ export const ProfileNavigation: FC = () => {
                             Избранное
                         </Button>
                     </StyledNavLink>
+                    <StyledNavLink to="/chat">
+                        <Button
+                            variant="text"
+                            color={location.pathname === '/profile/favorites' ? 'primary' : 'secondary'}
+                            size="large"
+                        >
+                            Чат
+                        </Button>
+                    </StyledNavLink>
                     <Button
                         variant="text"
                         color="secondary"

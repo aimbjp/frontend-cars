@@ -73,6 +73,7 @@ const initialState: IInitialState = {
         email: '',
         name: '',
         username: '',
+        userId: '',
     },
 
     register: false,
@@ -126,7 +127,7 @@ export function userReducer (state = initialState, action: TActionUserType)  {
                 ...state,
                 register: false,
                 registerFailed: false,
-                user: { email: action.email, name: action.name, username: action.username}
+                user: { email: action.email, name: action.name, username: action.username, userId: action.userId}
             }
         }
 
@@ -155,7 +156,7 @@ export function userReducer (state = initialState, action: TActionUserType)  {
                 ...state,
                 authorization: false,
                 authorizationFailed: false,
-                user: { email: action.email, name: action.name, username: action.username}
+                user: { email: action.email, name: action.name, username: action.username, userId: action.userId}
             }
         }
 
@@ -182,7 +183,8 @@ export function userReducer (state = initialState, action: TActionUserType)  {
                     ...state.user,
                     email: action.email,
                     name: action.name,
-                    username: action.username
+                    username: action.username,
+                    userId: action.userId
                 }
             }
         }
@@ -200,7 +202,8 @@ export function userReducer (state = initialState, action: TActionUserType)  {
                     ...state.user,
                     email: action.email,
                     name: action.name,
-                    username: action.username
+                    username: action.username,
+                    userId: action.userId
                 }
             }
         }
