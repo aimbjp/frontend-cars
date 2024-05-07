@@ -15,6 +15,10 @@ export const HomePage: FC = () => {
             <br/>
             <br/>
             <Link to={'/chat'}>Chat</Link>
+            <br/>
+            <br/>
+            <br/>
+            <Link to={'/car/add-details'}>Add car details</Link>
         </Grid>
     )
 }
