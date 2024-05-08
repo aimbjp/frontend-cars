@@ -63,6 +63,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/redux-thunk": "^2.1.0",
     "@types/socket.io-client": "^3.0.0",
+    "@yandex/ymaps3-types": "^0.0.26",
     "cypress": "^13.7.3",
     "eslint-plugin-cypress": "^2.15.1",
     "fetch-mock": "^9.11.0",

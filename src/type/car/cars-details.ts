@@ -23,17 +23,17 @@ export interface Engine {
 }
 
 export interface BodyType {
-    engineId: number;
+    bodyTypeId: number;
     type: string;
 }
 
 export interface Transmission {
-    engineId: number;
+    transmissionId: number;
     type: string;
 }
 
 export interface Color {
-    engineId: number;
+    colorId: number;
     type: string;
 }
 

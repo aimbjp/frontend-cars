@@ -15,9 +15,24 @@ import {
     ADD_ENGINE,
     ADD_ENGINE_FAILED,
     ADD_ENGINE_SUCCEED,
-    ADD_MODEL, ADD_MODEL_ENGINE_ASSOCIATION, ADD_MODEL_ENGINE_ASSOCIATION_FAILED, ADD_MODEL_ENGINE_ASSOCIATION_SUCCEED,
+    ADD_MODEL,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION_FAILED,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION_SUCCEED,
+    ADD_MODEL_COLOR_ASSOCIATION,
+    ADD_MODEL_COLOR_ASSOCIATION_FAILED,
+    ADD_MODEL_COLOR_ASSOCIATION_SUCCEED,
+    ADD_MODEL_DRIVE_ASSOCIATION,
+    ADD_MODEL_DRIVE_ASSOCIATION_FAILED,
+    ADD_MODEL_DRIVE_ASSOCIATION_SUCCEED,
+    ADD_MODEL_ENGINE_ASSOCIATION,
+    ADD_MODEL_ENGINE_ASSOCIATION_FAILED,
+    ADD_MODEL_ENGINE_ASSOCIATION_SUCCEED,
     ADD_MODEL_FAILED,
     ADD_MODEL_SUCCEED,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION_SUCCEED,
     ADD_TRANSMISSION,
     ADD_TRANSMISSION_FAILED,
     ADD_TRANSMISSION_SUCCEED,
@@ -45,16 +60,22 @@ import {
     GET_BRANDS,
     GET_BRANDS_FAILED,
     GET_BRANDS_SUCCEED,
+    GET_COLORS, GET_COLORS_FAILED, GET_COLORS_SUCCEED,
     GET_DRIVES,
     GET_DRIVES_FAILED,
     GET_DRIVES_SUCCEED,
     GET_ENGINES,
     GET_ENGINES_FAILED,
-    GET_ENGINES_SUCCEED, GET_MODELS_BY_BRAND, GET_MODELS_BY_BRAND_FAILED,
+    GET_ENGINES_SUCCEED,
+    GET_MODELS_BY_BRAND,
+    GET_MODELS_BY_BRAND_FAILED,
     GET_MODELS_BY_BRAND_SUCCEED,
     GET_MODELS_WITHOUT_BRAND,
     GET_MODELS_WITHOUT_BRAND_FAILED,
     GET_MODELS_WITHOUT_BRAND_SUCCEED,
+    GET_TRANSMISSIONS,
+    GET_TRANSMISSIONS_FAILED,
+    GET_TRANSMISSIONS_SUCCEED,
     UPDATE_BODY_TYPE,
     UPDATE_BODY_TYPE_FAILED,
     UPDATE_BODY_TYPE_SUCCEED,
@@ -72,11 +93,15 @@ import {
     UPDATE_TRANSMISSION_SUCCEED
 } from "../action-types/car-details";
 import {
-    fetchAddBrand, fetchAddDetailNameOnly,
+    fetchAddBrand,
+    fetchAddDetailNameOnly,
     fetchAddModel,
-    fetchAssociateModelWithBrand, fetchDeleteDetailById,
-    fetchGetBrands, fetchGetDetails,
-    fetchGetModelsWithoutBrand, fetchUpdateDetailWithId
+    fetchAssociateModelWithBrand,
+    fetchDeleteDetailById,
+    fetchGetBrands,
+    fetchGetDetails,
+    fetchGetModelsWithoutBrand,
+    fetchUpdateDetailWithId
 } from "../api/car/car-deatails";
 import {request} from "../api/user";
 
@@ -346,6 +371,21 @@ export const deleteBodyType = (id: number): AppThunkAction => dispatch => {
 };
 
 
+export const getTransmissions = (): AppThunkAction => {
+    return (dispatch: AppDispatch) => {
+        dispatch({type: GET_TRANSMISSIONS});
+        fetchGetDetails('/transmissions').then(
+            res => {
+                if (res.success) {
+                    dispatch({type: GET_TRANSMISSIONS_SUCCEED, transmissions: res.transmissions});
+                } else {
+                    dispatch({type: GET_TRANSMISSIONS_FAILED});
+                }
+            }
+        )
+    }
+}
+
 export const addTransmission = (name: string): AppThunkAction => dispatch => {
     return(dispatch: AppDispatch) => {
         dispatch({type: ADD_TRANSMISSION});
@@ -368,6 +408,21 @@ export const deleteTransmission = (id: number): AppThunkAction => dispatch => {
         .then(res => dispatch({ type: res.success ? DELETE_TRANSMISSION_SUCCEED : DELETE_TRANSMISSION_FAILED }))
         .catch(() => dispatch({ type: DELETE_TRANSMISSION_FAILED }));
 };
+
+export const getColors = (): AppThunkAction => {
+    return (dispatch: AppDispatch) => {
+        dispatch({type: GET_COLORS});
+        fetchGetDetails('/colors').then(
+            res => {
+                if (res.success) {
+                    dispatch({type: GET_COLORS_SUCCEED, colors: res.colors});
+                } else {
+                    dispatch({type: GET_COLORS_FAILED});
+                }
+            }
+        )
+    }
+}
 
 export const addColor = (name: string): AppThunkAction => dispatch => {
     dispatch({ type: ADD_COLOR });
@@ -428,4 +483,85 @@ export const addModelEngineAssociation = (modelIds: string[], engineIds: string[
             }
         })
         .catch(error => dispatch({type: ADD_MODEL_ENGINE_ASSOCIATION_FAILED}));
+};
+
+
+export const addModelDriveAssociation = (modelIds: string[], driveIds: string[]): AppThunkAction => dispatch => {
+    dispatch({type: ADD_MODEL_DRIVE_ASSOCIATION});
+    request('/associate/model-drive', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({modelIds, driveIds})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                dispatch({type: ADD_MODEL_DRIVE_ASSOCIATION_SUCCEED});
+            } else {
+                dispatch({type: ADD_MODEL_DRIVE_ASSOCIATION_FAILED});
+            }
+        })
+        .catch(error => dispatch({type: ADD_MODEL_DRIVE_ASSOCIATION_FAILED}));
+};
+
+export const addModelBodyTypeAssociation = (modelIds: string[], bodyTypeIds: string[]): AppThunkAction => dispatch => {
+    dispatch({type: ADD_MODEL_BODY_TYPE_ASSOCIATION});
+    request('/associate/model-body-type', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({modelIds, bodyTypeIds})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                dispatch({type: ADD_MODEL_BODY_TYPE_ASSOCIATION_SUCCEED});
+            } else {
+                dispatch({type: ADD_MODEL_BODY_TYPE_ASSOCIATION_FAILED});
+            }
+        })
+        .catch(error => dispatch({type: ADD_MODEL_BODY_TYPE_ASSOCIATION_FAILED}));
+};
+
+export const addModelTransmissionAssociation = (modelIds: string[], transmissionIds: string[]): AppThunkAction => dispatch => {
+    dispatch({type: ADD_MODEL_TRANSMISSION_ASSOCIATION});
+    request('/associate/model-transmission', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({modelIds, transmissionIds})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                dispatch({type: ADD_MODEL_TRANSMISSION_ASSOCIATION_SUCCEED});
+            } else {
+                dispatch({type: ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED});
+            }
+        })
+        .catch(error => dispatch({type: ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED}));
+};
+
+export const addModelColorAssociation = (modelIds: string[], colorIds: string[]): AppThunkAction => dispatch => {
+    dispatch({type: ADD_MODEL_COLOR_ASSOCIATION});
+    request('/associate/model-color', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({modelIds, colorIds})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                dispatch({type: ADD_MODEL_COLOR_ASSOCIATION_SUCCEED});
+            } else {
+                dispatch({type: ADD_MODEL_COLOR_ASSOCIATION_FAILED});
+            }
+        })
+        .catch(error => dispatch({type: ADD_MODEL_COLOR_ASSOCIATION_FAILED}));
 };

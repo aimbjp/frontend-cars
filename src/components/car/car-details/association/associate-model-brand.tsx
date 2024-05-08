@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import {FormControl, InputLabel, Select, MenuItem, Button, Box} from '@mui/material';
 import {createAssociationModelBrand, getBrands, getModelsWithoutBrand} from "../../../../services/thunks/cars-details";
 import {useDispatch, useSelector} from "../../../../services/hooks";
 import {Brand, ModelWoBrand} from "../../../../type/car/cars-details";
@@ -21,13 +21,15 @@ export default function AssociationComponent() {
 
 
     return (
-        <div>
+        <Box sx={{alignItems: 'center', justifyItems: 'center'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+
             <FormControl variant="outlined" style={{ minWidth: 120, margin: 10 }}>
-                <InputLabel>Brand</InputLabel>
+                <InputLabel>Бренд</InputLabel>
                 <Select
                     value={selectedBrand}
                     onChange={(e) => setSelectedBrand(e.target.value)}
-                    label="Brand"
+                    label="Бренд"
                 >
                     {brands.map((brand: Brand) => (
                         <MenuItem key={brand.brandId} value={brand.brandId}>
@@ -38,11 +40,11 @@ export default function AssociationComponent() {
             </FormControl>
 
             <FormControl variant="outlined" style={{ minWidth: 120, margin: 10 }}>
-                <InputLabel>Model</InputLabel>
+                <InputLabel>Модель</InputLabel>
                 <Select
                     value={selectedModel}
                     onChange={(e) => setSelectedModel(e.target.value)}
-                    label="Model"
+                    label="Модель"
                 >
                     {modelsWithoutBrand.map((model: ModelWoBrand) => (
                         <MenuItem key={model.modelId} value={model.modelId}>
@@ -51,15 +53,17 @@ export default function AssociationComponent() {
                     ))}
                 </Select>
             </FormControl>
+            </Box>
 
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAddAssociation}
-                style={{ marginTop: 20 }}
-            >
-                Добавить связь
-            </Button>
-        </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAddAssociation}
+                >
+                    Добавить связь
+                </Button>
+            </Box>
+        </Box>
     );
 }

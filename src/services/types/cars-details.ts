@@ -14,9 +14,24 @@ import {
     ADD_ENGINE,
     ADD_ENGINE_FAILED,
     ADD_ENGINE_SUCCEED,
-    ADD_MODEL, ADD_MODEL_ENGINE_ASSOCIATION, ADD_MODEL_ENGINE_ASSOCIATION_FAILED, ADD_MODEL_ENGINE_ASSOCIATION_SUCCEED,
+    ADD_MODEL,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION_FAILED,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION_SUCCEED,
+    ADD_MODEL_COLOR_ASSOCIATION,
+    ADD_MODEL_COLOR_ASSOCIATION_FAILED,
+    ADD_MODEL_COLOR_ASSOCIATION_SUCCEED,
+    ADD_MODEL_DRIVE_ASSOCIATION,
+    ADD_MODEL_DRIVE_ASSOCIATION_FAILED,
+    ADD_MODEL_DRIVE_ASSOCIATION_SUCCEED,
+    ADD_MODEL_ENGINE_ASSOCIATION,
+    ADD_MODEL_ENGINE_ASSOCIATION_FAILED,
+    ADD_MODEL_ENGINE_ASSOCIATION_SUCCEED,
     ADD_MODEL_FAILED,
     ADD_MODEL_SUCCEED,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION_SUCCEED,
     ADD_TRANSMISSION,
     ADD_TRANSMISSION_FAILED,
     ADD_TRANSMISSION_SUCCEED,
@@ -44,16 +59,24 @@ import {
     GET_BRANDS,
     GET_BRANDS_FAILED,
     GET_BRANDS_SUCCEED,
-    GET_COLORS, GET_COLORS_FAILED, GET_COLORS_SUCCEED,
+    GET_COLORS,
+    GET_COLORS_FAILED,
+    GET_COLORS_SUCCEED,
     GET_DRIVES,
     GET_DRIVES_FAILED,
     GET_DRIVES_SUCCEED,
     GET_ENGINES,
     GET_ENGINES_FAILED,
-    GET_ENGINES_SUCCEED, GET_MODELS_BY_BRAND, GET_MODELS_BY_BRAND_FAILED, GET_MODELS_BY_BRAND_SUCCEED,
+    GET_ENGINES_SUCCEED,
+    GET_MODELS_BY_BRAND,
+    GET_MODELS_BY_BRAND_FAILED,
+    GET_MODELS_BY_BRAND_SUCCEED,
     GET_MODELS_WITHOUT_BRAND,
     GET_MODELS_WITHOUT_BRAND_FAILED,
-    GET_MODELS_WITHOUT_BRAND_SUCCEED, GET_TRANSMISSIONS, GET_TRANSMISSIONS_FAILED, GET_TRANSMISSIONS_SUCCEED,
+    GET_MODELS_WITHOUT_BRAND_SUCCEED,
+    GET_TRANSMISSIONS,
+    GET_TRANSMISSIONS_FAILED,
+    GET_TRANSMISSIONS_SUCCEED,
     UPDATE_BODY_TYPE,
     UPDATE_BODY_TYPE_FAILED,
     UPDATE_BODY_TYPE_SUCCEED,
@@ -308,8 +331,28 @@ interface IAddModelEngineAssociationAction { readonly type: typeof ADD_MODEL_ENG
 interface IAddModelEngineAssociationSuccessAction { readonly type: typeof ADD_MODEL_ENGINE_ASSOCIATION_SUCCEED; }
 interface IAddModelEngineAssociationFailedAction { readonly type: typeof ADD_MODEL_ENGINE_ASSOCIATION_FAILED; }
 
+interface IAddModelDriveAssociationAction { readonly type: typeof ADD_MODEL_DRIVE_ASSOCIATION; }
+interface IAddModelDriveAssociationSuccessAction { readonly type: typeof ADD_MODEL_DRIVE_ASSOCIATION_SUCCEED; }
+interface IAddModelDriveAssociationFailedAction { readonly type: typeof ADD_MODEL_DRIVE_ASSOCIATION_FAILED; }
+
+interface IAddModelBodyTypeAssociationAction { readonly type: typeof ADD_MODEL_BODY_TYPE_ASSOCIATION; }
+interface IAddModelBodyTypeAssociationSuccessAction { readonly type: typeof ADD_MODEL_BODY_TYPE_ASSOCIATION_SUCCEED; }
+interface IAddModelBodyTypeAssociationFailedAction { readonly type: typeof ADD_MODEL_BODY_TYPE_ASSOCIATION_FAILED; }
+
+interface IAddModelTransmissionAssociationAction { readonly type: typeof ADD_MODEL_TRANSMISSION_ASSOCIATION; }
+interface IAddModelTransmissionAssociationSuccessAction { readonly type: typeof ADD_MODEL_TRANSMISSION_ASSOCIATION_SUCCEED; }
+interface IAddModelTransmissionAssociationFailedAction { readonly type: typeof ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED; }
+
+interface IAddModelColorAssociationAction { readonly type: typeof ADD_MODEL_COLOR_ASSOCIATION; }
+interface IAddModelColorAssociationSuccessAction { readonly type: typeof ADD_MODEL_COLOR_ASSOCIATION_SUCCEED; }
+interface IAddModelColorAssociationFailedAction { readonly type: typeof ADD_MODEL_COLOR_ASSOCIATION_FAILED; }
+
 export type TModelActionTypes = IGetModelsByBrandAction | IGetModelsByBrandSuccessAction | IGetModelsByBrandFailedAction |
-    IAddModelEngineAssociationAction | IAddModelEngineAssociationSuccessAction | IAddModelEngineAssociationFailedAction;
+    IAddModelEngineAssociationAction | IAddModelEngineAssociationSuccessAction | IAddModelEngineAssociationFailedAction |
+    IAddModelDriveAssociationAction | IAddModelDriveAssociationSuccessAction | IAddModelDriveAssociationFailedAction |
+    IAddModelBodyTypeAssociationAction | IAddModelBodyTypeAssociationSuccessAction | IAddModelBodyTypeAssociationFailedAction |
+    IAddModelTransmissionAssociationAction | IAddModelTransmissionAssociationSuccessAction | IAddModelTransmissionAssociationFailedAction |
+    IAddModelColorAssociationAction | IAddModelColorAssociationSuccessAction | IAddModelColorAssociationFailedAction;
 
 
 export type TActionCarDetailsType = IAddBrandCarDetailsFailedAction | IAddBrandCarDetailsSuccessAction |

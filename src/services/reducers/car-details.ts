@@ -14,9 +14,24 @@ import {
     ADD_ENGINE,
     ADD_ENGINE_FAILED,
     ADD_ENGINE_SUCCEED,
-    ADD_MODEL, ADD_MODEL_ENGINE_ASSOCIATION, ADD_MODEL_ENGINE_ASSOCIATION_FAILED, ADD_MODEL_ENGINE_ASSOCIATION_SUCCEED,
+    ADD_MODEL,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION_FAILED,
+    ADD_MODEL_BODY_TYPE_ASSOCIATION_SUCCEED,
+    ADD_MODEL_COLOR_ASSOCIATION,
+    ADD_MODEL_COLOR_ASSOCIATION_FAILED,
+    ADD_MODEL_COLOR_ASSOCIATION_SUCCEED,
+    ADD_MODEL_DRIVE_ASSOCIATION,
+    ADD_MODEL_DRIVE_ASSOCIATION_FAILED,
+    ADD_MODEL_DRIVE_ASSOCIATION_SUCCEED,
+    ADD_MODEL_ENGINE_ASSOCIATION,
+    ADD_MODEL_ENGINE_ASSOCIATION_FAILED,
+    ADD_MODEL_ENGINE_ASSOCIATION_SUCCEED,
     ADD_MODEL_FAILED,
     ADD_MODEL_SUCCEED,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED,
+    ADD_MODEL_TRANSMISSION_ASSOCIATION_SUCCEED,
     ADD_TRANSMISSION,
     ADD_TRANSMISSION_FAILED,
     ADD_TRANSMISSION_SUCCEED,
@@ -44,16 +59,24 @@ import {
     GET_BRANDS,
     GET_BRANDS_FAILED,
     GET_BRANDS_SUCCEED,
-    GET_COLORS, GET_COLORS_FAILED, GET_COLORS_SUCCEED,
+    GET_COLORS,
+    GET_COLORS_FAILED,
+    GET_COLORS_SUCCEED,
     GET_DRIVES,
     GET_DRIVES_FAILED,
     GET_DRIVES_SUCCEED,
     GET_ENGINES,
     GET_ENGINES_FAILED,
-    GET_ENGINES_SUCCEED, GET_MODELS_BY_BRAND, GET_MODELS_BY_BRAND_FAILED, GET_MODELS_BY_BRAND_SUCCEED,
+    GET_ENGINES_SUCCEED,
+    GET_MODELS_BY_BRAND,
+    GET_MODELS_BY_BRAND_FAILED,
+    GET_MODELS_BY_BRAND_SUCCEED,
     GET_MODELS_WITHOUT_BRAND,
     GET_MODELS_WITHOUT_BRAND_FAILED,
-    GET_MODELS_WITHOUT_BRAND_SUCCEED, GET_TRANSMISSIONS, GET_TRANSMISSIONS_FAILED, GET_TRANSMISSIONS_SUCCEED,
+    GET_MODELS_WITHOUT_BRAND_SUCCEED,
+    GET_TRANSMISSIONS,
+    GET_TRANSMISSIONS_FAILED,
+    GET_TRANSMISSIONS_SUCCEED,
     UPDATE_BODY_TYPE,
     UPDATE_BODY_TYPE_FAILED,
     UPDATE_BODY_TYPE_SUCCEED,
@@ -70,7 +93,7 @@ import {
     UPDATE_TRANSMISSION_FAILED,
     UPDATE_TRANSMISSION_SUCCEED
 } from "../action-types/car-details";
-import {BodyType, Brand, Color, Engine, Model, ModelWoBrand, Transmission} from "../../type/car/cars-details";
+import {BodyType, Brand, Color, Drive, Engine, Model, ModelWoBrand, Transmission} from "../../type/car/cars-details";
 
 
 export interface ICarDetails{
@@ -97,6 +120,7 @@ export interface ICarDetails{
     associateModelBrandSuccess: boolean,
     associateModelBrandFailed: boolean,
 
+    drives: Drive[]
     driveAdd: boolean;
     driveAddSucceed: boolean;
     driveAddFailed: boolean;
@@ -172,9 +196,19 @@ export interface ICarDetails{
     modelsByBrand: Model[],
     modelsLoading: boolean,
     modelsError: boolean,
+
     modelEngineAssociationAdding: boolean,
     modelEngineAssociationSuccess: boolean,
     modelEngineAssociationError: boolean,
+    modelBodyTypeAssociationAdding: boolean;
+    modelBodyTypeAssociationSuccess: boolean;
+    modelBodyTypeAssociationError: boolean;
+    modelTransmissionAssociationAdding: boolean;
+    modelTransmissionAssociationSuccess: boolean;
+    modelTransmissionAssociationError: boolean;
+    modelColorAssociationAdding: boolean;
+    modelColorAssociationSuccess: boolean;
+    modelColorAssociationError: boolean;
 }
 
 const initialState: ICarDetails = {
@@ -200,6 +234,7 @@ const initialState: ICarDetails = {
     associateModelBrandSuccess: false,
     associateModelBrandFailed: false,
 
+    drives: [],
     driveAdd: false,
     driveAddSucceed: false,
     driveAddFailed: false,
@@ -274,9 +309,20 @@ const initialState: ICarDetails = {
     modelsByBrand: [],
     modelsLoading: false,
     modelsError: false,
+
+
     modelEngineAssociationAdding: false,
     modelEngineAssociationSuccess: false,
     modelEngineAssociationError: false,
+    modelBodyTypeAssociationAdding: false,
+    modelBodyTypeAssociationSuccess: false,
+    modelBodyTypeAssociationError: false,
+    modelTransmissionAssociationAdding: false,
+    modelTransmissionAssociationSuccess: false,
+    modelTransmissionAssociationError: false,
+    modelColorAssociationAdding: false,
+    modelColorAssociationSuccess: false,
+    modelColorAssociationError: false,
 }
 
 export function carDetailsReducer (state = initialState, action: any) {
@@ -513,6 +559,35 @@ export function carDetailsReducer (state = initialState, action: any) {
             return {...state, modelEngineAssociationAdding: false, modelEngineAssociationSuccess: true};
         case ADD_MODEL_ENGINE_ASSOCIATION_FAILED:
             return {...state, modelEngineAssociationAdding: false, modelEngineAssociationError: true};
+
+        case ADD_MODEL_BODY_TYPE_ASSOCIATION:
+            return {...state, modelBodyTypeAssociationAdding: true};
+        case ADD_MODEL_BODY_TYPE_ASSOCIATION_SUCCEED:
+            return {...state, modelBodyTypeAssociationAdding: false, modelBodyTypeAssociationSuccess: true};
+        case ADD_MODEL_BODY_TYPE_ASSOCIATION_FAILED:
+            return {...state, modelBodyTypeAssociationAdding: false, modelBodyTypeAssociationError: true};
+
+        case ADD_MODEL_TRANSMISSION_ASSOCIATION:
+            return {...state, modelTransmissionAssociationAdding: true};
+        case ADD_MODEL_TRANSMISSION_ASSOCIATION_SUCCEED:
+            return {...state, modelTransmissionAssociationAdding: false, modelTransmissionAssociationSuccess: true};
+        case ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED:
+            return {...state, modelTransmissionAssociationAdding: false, modelTransmissionAssociationError: true};
+
+        case ADD_MODEL_COLOR_ASSOCIATION:
+            return {...state, modelColorAssociationAdding: true};
+        case ADD_MODEL_COLOR_ASSOCIATION_SUCCEED:
+            return {...state, modelColorAssociationAdding: false, modelColorAssociationSuccess: true};
+        case ADD_MODEL_COLOR_ASSOCIATION_FAILED:
+            return {...state, modelColorAssociationAdding: false, modelColorAssociationError: true};
+
+        case ADD_MODEL_DRIVE_ASSOCIATION:
+            return {...state, modelDriveAssociationAdding: true};
+        case ADD_MODEL_DRIVE_ASSOCIATION_SUCCEED:
+            return {...state, modelDriveAssociationAdding: false, modelDriveAssociationSuccess: true};
+        case ADD_MODEL_DRIVE_ASSOCIATION_FAILED:
+            return {...state, modelDriveAssociationAdding: false, modelDriveAssociationError: true};
+
 
         default:
             return state;

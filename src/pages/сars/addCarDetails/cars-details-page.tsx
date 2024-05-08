@@ -132,25 +132,25 @@ const CarsDetailsPage: React.FC = () => {
                     scrollButtons="auto"
                     aria-label="disabled tabs example"
                 >
-                    <Tab label="Add Attributes" />
-                    <Tab label="Add Brand & Model" />
-                    <Tab label="Manage Associations" />
+                    <Tab label="Добавление деталей" />
+                    <Tab label="Добавление бренда и модели" />
+                    <Tab label="Управление связями" />
                 </Tabs>
             </Paper>
             <Box sx={{ p: 3 }}>
                 {tabValue === 0 && (
                     <>
-                        <TextDetailAdd buttonText="Add Drive" label="Drive Name" handleAdd={handleDrive} added_success={driveAddSucceed} />
-                        <TextDetailAdd buttonText="Add Engine" label="Engine Type" handleAdd={handleEngine} added_success={engineAddSucceed} />
-                        <TextDetailAdd buttonText="Add Body Type" label="Body Type" handleAdd={handleBodyType} added_success={bodyTypeAddSucceed} />
-                        <TextDetailAdd buttonText="Add Transmission" label="Transmission Type" handleAdd={handleTransmission} added_success={transmissionAddSucceed} />
-                        <TextDetailAdd buttonText="Add Color" label="Color" handleAdd={handleColor} added_success={colorAddSucceed} />
+                        <TextDetailAdd buttonText="Добавить привод" label="Привод" handleAdd={handleDrive} added_success={driveAddSucceed} />
+                        <TextDetailAdd buttonText="Добавить двигатель" label="Двигатель" handleAdd={handleEngine} added_success={engineAddSucceed} />
+                        <TextDetailAdd buttonText="Добавить тип кузова" label="Куозов" handleAdd={handleBodyType} added_success={bodyTypeAddSucceed} />
+                        <TextDetailAdd buttonText="Добавить коробку передач" label="Коробка передач" handleAdd={handleTransmission} added_success={transmissionAddSucceed} />
+                        <TextDetailAdd buttonText="Добавить цвет" label="Цвет" handleAdd={handleColor} added_success={colorAddSucceed} />
                     </>
                 )}
                 {tabValue === 1 && (
                     <>
-                        <TextDetailAdd buttonText="Add Brand" label="Brand Name" handleAdd={handleBrand} added_success={brandAddSucceed} />
-                        <TextDetailAdd buttonText="Add Model" label="Model Name" handleAdd={handleModel} added_success={modelAddSucceed} />
+                        <TextDetailAdd buttonText="Добавить бренд" label="Название бренда" handleAdd={handleBrand} added_success={brandAddSucceed} />
+                        <TextDetailAdd buttonText="Добавить модель" label="Название модели" handleAdd={handleModel} added_success={modelAddSucceed} />
                     </>
                 )}
                 {tabValue === 2 && (

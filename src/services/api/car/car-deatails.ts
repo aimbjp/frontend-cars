@@ -67,3 +67,4 @@ export const fetchDeleteDetailById = (endpoint: string, id: number) => {
         headers: {'Content-Type': 'application/json'}
     })
 }
+

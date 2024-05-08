@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { TextField, Button } from '@mui/material';
+import {TextField, Button, Box} from '@mui/material';
 import { ITextDetailAdd } from "./type";
 
 export const TextDetailAdd: FC<ITextDetailAdd> = ({ label, handleAdd, buttonText, added_success }) => {
@@ -23,8 +23,9 @@ export const TextDetailAdd: FC<ITextDetailAdd> = ({ label, handleAdd, buttonText
     };
 
     return (
-        <div>
+        <Box sx={{ display: 'grid', justifyContent: 'center', mt: 2 }}>
             <TextField
+
                 label={label}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -33,9 +34,9 @@ export const TextDetailAdd: FC<ITextDetailAdd> = ({ label, handleAdd, buttonText
                     style: inputStyle
                 }}
             />
-            <Button onClick={() => handleAdd(name)} color="primary" variant="contained">
+            <Button sx={{ mt: 0.5 }} onClick={() => handleAdd(name)} color="primary" variant="contained">
                 {buttonText}
             </Button>
-        </div>
+        </Box>
     );
 }
