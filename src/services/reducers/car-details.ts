@@ -94,6 +94,7 @@ import {
     UPDATE_TRANSMISSION_SUCCEED
 } from "../action-types/car-details";
 import {BodyType, Brand, Color, Drive, Engine, Model, ModelWoBrand, Transmission} from "../../type/car/cars-details";
+import {TActionCarDetailsType} from "../types/cars-details";
 
 
 export interface ICarDetails{
@@ -325,7 +326,7 @@ const initialState: ICarDetails = {
     modelColorAssociationError: false,
 }
 
-export function carDetailsReducer (state = initialState, action: any) {
+export function carDetailsReducer (state = initialState, action: TActionCarDetailsType) {
     switch (action.type) {
         case ADD_BRAND: return {
             ...state,

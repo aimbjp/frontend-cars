@@ -30,7 +30,6 @@ export const refreshToken = () => {
             if (!refreshData.success) {
                 return Promise.reject(refreshData);
             }
-            localStorage.setItem("refreshToken", refreshData.refreshToken);
             localStorage.setItem("accessToken", refreshData.accessToken);
             return refreshData;
         });

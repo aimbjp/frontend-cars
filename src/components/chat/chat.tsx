@@ -3,7 +3,7 @@ import { fetchUsers } from '../../services/api/users';
 import { IUser } from "../../type/user/user-types";
 import {
     Container, TextField, Button, Select, MenuItem, List, ListItem,
-    Typography, styled, TypographyProps, Tooltip, Box
+    Typography, styled, TypographyProps, Tooltip, Box, Avatar, IconButton
 } from '@mui/material';
 import { useSelector } from "../../services/hooks";
 import { IMessage } from "../../type/chat-types";
@@ -11,6 +11,9 @@ import io from "socket.io-client";
 import ModalImage from "react-modal-image";
 import {Link} from "react-router-dom";
 import {URL_API} from "../../services/api/links";
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 
 
 // Стилизация текста сообщения
@@ -100,7 +103,7 @@ const Chat = () => {
 
         const timer = setTimeout(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 1000); // Задержка 100 мс
+        }, 1000);
 
         return () => clearTimeout(timer);
 
@@ -111,10 +114,9 @@ const Chat = () => {
         if (selectedUserId) {
             let mediaUrlsToSend: string[] = [];
             if (selectedFiles.length > 0) {
-                mediaUrlsToSend = await uploadFiles(); // Дожидаемся загрузки файлов
+                mediaUrlsToSend = await uploadFiles();
             }
             if (mediaUrlsToSend.length > 0 || currentMessage) {
-                // Отправляем сообщение с медиа или текстовое сообщение
                 socketRef.current?.emit("sendMessage", {
                     receiver_id: selectedUserId,
                     content: currentMessage,
@@ -138,7 +140,7 @@ const Chat = () => {
                 setCurrentMessage('');
                 setMediaUrls([]);
                 setSelectedFiles([]);
-                setFileInputKey(Date.now()); // Сброс input для файлов
+                setFileInputKey(Date.now());
             }
         }
 
@@ -150,24 +152,23 @@ const Chat = () => {
         socketRef.current?.emit('getMessagesHistory', { partnerId: userId });
     };
 
-
-
-
-    // Загрузка фото
     const [mediaUrls, setMediaUrls] = useState<string[]>([]);
-
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
     const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
-            setSelectedFiles(Array.from(event.target.files));
+            const newFiles = Array.from(event.target.files);
+            setSelectedFiles(prevFiles => [...prevFiles, ...newFiles]);
         }
 
         setFileInputKey(Date.now());
 
     };
 
+    const handleFileDelete = (index: number) => {
+        setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+    };
 
     const uploadFiles = async () => {
         const formData = new FormData();
@@ -183,19 +184,21 @@ const Chat = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
-                return data.filesUrls; // Возвращаем массив URL-адресов напрямую
+                return data.filesUrls;
             } else {
                 throw new Error('Network response was not ok.');
             }
         } catch (error) {
             console.error("Ошибка при загрузке файлов:", error);
-            return []; // В случае ошибки возвращаем пустой массив
+            return [];
         }
     };
 
     const [fileInputKey, setFileInputKey] = useState(Date.now());
 
-
+    const resetFileInput = () => {
+        setFileInputKey(Date.now());
+    };
 
 
     return (
@@ -256,17 +259,26 @@ const Chat = () => {
                     ref={fileInputRef}
                 />
                 <Button onClick={() => fileInputRef.current?.click()}>Загрузить файлы</Button>
-                {/* Показ списка загруженных файлов */}
                 <div>
                     {selectedFiles.map((file, index) => (
-                        <div key={index}>{file.name}</div>
+                        <Box key={index} sx={{display: 'flex', alignItems: 'center', margin: 1}}>
+                            <Avatar src={URL.createObjectURL(file)} sx={{width: 56, height: 56, marginRight: 2}}/>
+                            <Typography variant="body2" sx={{flexGrow: 1}}>{file.name}</Typography>
+                            <IconButton onClick={() => handleFileDelete(index)} edge="end" aria-label="delete">
+                                <DeleteIcon/>
+                            </IconButton>
+                            <IconButton onClick={() => fileInputRef.current?.click()} edge="end" aria-label="add files">
+                                <AddCircleOutlineIcon/>
+                            </IconButton>
+                        </Box>
                     ))}
                 </div>
-    <Button type="submit" variant="contained" color="primary" sx={{marginTop: '8px', width: '100%'}}>Отправить</Button>
-</Box>
-</Container>
-)
-    ;
+                <Button type="submit" variant="contained" color="primary"
+                        sx={{marginTop: '8px', width: '100%'}}>Отправить</Button>
+            </Box>
+        </Container>
+    )
+        ;
 };
 
 export default Chat;

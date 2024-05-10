@@ -26,16 +26,19 @@ export const AppHeader: FC = () => {
         <Box onClick={handleDrawerToggle} sx={{ width: 250 }}>
             <List>
                 <ListItem button component={RouterLink} to="/login">
-                    <ListItemText primary="Login" />
+                    <ListItemText primary="Вход" />
                 </ListItem>
                 <ListItem button component={RouterLink} to="/profile">
-                    <ListItemText primary="Profile" />
+                    <ListItemText primary="Профиль" />
                 </ListItem>
                 <ListItem button component={RouterLink} to="/chat">
-                    <ListItemText primary="Chat" />
+                    <ListItemText primary="Чат" />
                 </ListItem>
                 <ListItem button component={RouterLink} to="/car/add-details">
-                    <ListItemText primary="Add Car Details" />
+                    <ListItemText primary="Добавить детали" />
+                </ListItem>
+                <ListItem button component={RouterLink} to="/listings/add">
+                    <ListItemText primary="Добавить объявление" />
                 </ListItem>
             </List>
         </Box>
@@ -56,13 +59,14 @@ export const AppHeader: FC = () => {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Button color="inherit" component={RouterLink} to="/">CarsDiscovery</Button>
+                            <Button color="inherit" component={RouterLink} to="/">Cars</Button>
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Button color="inherit" component={RouterLink} to="/login">Login</Button>
-                            <Button color="inherit" component={RouterLink} to="/profile">Profile</Button>
-                            <Button color="inherit" component={RouterLink} to="/chat">Chat</Button>
-                            <Button color="inherit" component={RouterLink} to="/car/add-details">Add Car Details</Button>
+                            <Button color="inherit" component={RouterLink} to="/login">Вход</Button>
+                            <Button color="inherit" component={RouterLink} to="/profile">Профиль</Button>
+                            <Button color="inherit" component={RouterLink} to="/chat">Чат</Button>
+                            <Button color="inherit" component={RouterLink} to="/car/add-details">Добавить детали</Button>
+                            <Button color="inherit" component={RouterLink} to="/listings/add">Добавить объявление</Button>
                         </Box>
                     </Toolbar>
                 </Container>
@@ -72,7 +76,7 @@ export const AppHeader: FC = () => {
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
+                    keepMounted: true,
                 }}
             >
                 {drawer}

@@ -8,6 +8,7 @@ import {ProfileMain} from "../profile/content/profile-main/profile-main";
 import Chat from "../chat/chat";
 import {CarsDetailsPage} from "../../pages/сars";
 import {AppHeader} from "../header/header";
+import {ListingAddPage} from "../../pages/listings/listing-add-page";
 
 
 function App() {
@@ -32,7 +33,8 @@ function App() {
                 <Route path='/profile/' element={<OnlyAuth component={ <ProfilePage element={<ProfileMain />} /> } /> } />
                 <Route path='/profile/favorites' element={<OnlyAuth component={ <ProfilePage element={<ProfileMain />} /> } /> } />
 
-                <Route path='/car/add-details' element={<CarsDetailsPage />} />
+                <Route path='/car/add-details' element={<OnlyAuth component={<CarsDetailsPage />} /> } />
+                <Route path='/listings/add' element={<ListingAddPage />} />
 
                 <Route path='/*' element={<HomePage />}/>
             </Routes>
