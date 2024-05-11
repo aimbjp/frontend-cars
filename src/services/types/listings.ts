@@ -1,103 +1,107 @@
 import {
-    ADD_LISTING_FAILURE,
-    ADD_LISTING_REQUEST,
-    ADD_LISTING_SUCCESS,
-    GET_BODYTYPES_BRAND_FAILED,
-    GET_BODYTYPES_BY_MODEL,
-    GET_BODYTYPES_BY_MODEL_SUCCEED,
-    GET_COLORS_BY_MODEL,
-    GET_COLORS_BY_MODEL_FAILED,
-    GET_COLORS_BY_MODEL_SUCCEED,
-    GET_DRIVES_BY_MODEL,
-    GET_DRIVES_BY_MODEL_FAILED,
-    GET_DRIVES_BY_MODEL_SUCCEED,
-    GET_ENGINES_BY_MODEL,
-    GET_ENGINES_BY_MODEL_FAILED,
-    GET_ENGINES_BY_MODEL_SUCCEED,
-    GET_TRANSMISSIONS_BY_MODEL,
-    GET_TRANSMISSIONS_BY_MODEL_FAILED,
-    GET_TRANSMISSIONS_BY_MODEL_SUCCEED,
-    SET_ACTIVE_BODYTYPE,
-    SET_ACTIVE_BRAND,
-    SET_ACTIVE_COLOR, SET_ACTIVE_DESCRIPTION,
-    SET_ACTIVE_DRIVE,
-    SET_ACTIVE_ENGINE, SET_ACTIVE_EXCHANGE,
-    SET_ACTIVE_MILEAGE,
-    SET_ACTIVE_MODEL, SET_ACTIVE_OWNERSCOUNT,
-    SET_ACTIVE_PHOTOS,
-    SET_ACTIVE_PLACE,
-    SET_ACTIVE_PRICE, SET_ACTIVE_PTS,
-    SET_ACTIVE_TRANSMISSION,
-    SET_ACTIVE_VIN,
-    SET_ACTIVE_YEAR
+    GET_BODYTYPES_BY_MODEL_LISTINGS, GET_BODYTYPES_BY_MODEL_LISTINGS_FAILED, GET_BODYTYPES_BY_MODEL_LISTINGS_SUCCEED,
+    GET_BRANDS_LISTINGS,
+    GET_BRANDS_LISTINGS_FAILED,
+    GET_BRANDS_LISTINGS_SUCCEED,
+    GET_COLORS_BY_MODEL_LISTINGS,
+    GET_COLORS_BY_MODEL_LISTINGS_FAILED,
+    GET_COLORS_BY_MODEL_LISTINGS_SUCCEED,
+    GET_DRIVES_BY_MODEL_LISTINGS,
+    GET_DRIVES_BY_MODEL_LISTINGS_FAILED,
+    GET_DRIVES_BY_MODEL_LISTINGS_SUCCEED,
+    GET_ENGINES_BY_MODEL_LISTINGS,
+    GET_ENGINES_BY_MODEL_LISTINGS_FAILED,
+    GET_ENGINES_BY_MODEL_LISTINGS_SUCCEED,
+    GET_LISTINGS,
+    GET_LISTINGS_FAILURE,
+    GET_LISTINGS_SUCCESS,
+    GET_MODELS_BY_BRAND_LISTINGS,
+    GET_MODELS_BY_BRAND_LISTINGS_FAILED,
+    GET_MODELS_BY_BRAND_LISTINGS_SUCCEED,
+    GET_TRANSMISSIONS_BY_MODEL_LISTINGS,
+    GET_TRANSMISSIONS_BY_MODEL_LISTINGS_FAILED,
+    GET_TRANSMISSIONS_BY_MODEL_LISTINGS_SUCCEED, RESET_MODELS_BY_BRAND,
+    SET_ACTIVE_TAB,
+    UPDATE_SEARCH_PARAMETERS
 } from "../action-types/listings";
-import {IListingResponse} from "../../type/listings/listings";
+import { IParametersSearch, ListingsResponse} from "../../type/listings/listings";
+
 import {BodyType, Brand, Color, Drive, Engine, Model, Transmission} from "../../type/car/cars-details";
 
-export interface IAddListingRequestAction {
-    readonly type: typeof ADD_LISTING_REQUEST;
+
+interface IGetListingsAction {
+    readonly type: typeof GET_LISTINGS;
 }
 
-export interface IAddListingSuccessAction {
-    readonly type: typeof ADD_LISTING_SUCCESS;
-    payload: IListingResponse;
+interface IGetListingsActionSuccess {
+    readonly type: typeof GET_LISTINGS_SUCCESS;
+    listings: ListingsResponse;
 }
 
-export interface IAddListingFailureAction {
-    readonly type: typeof ADD_LISTING_FAILURE;
-    payload: string;
+interface IGetListingsActionFailure {
+    readonly type: typeof GET_LISTINGS_FAILURE;
+    error: string;
 }
 
-interface IGetEnginesByModelAction { readonly type: typeof GET_ENGINES_BY_MODEL; }
-interface IGetEnginesByModelSuccessAction { readonly type: typeof GET_ENGINES_BY_MODEL_SUCCEED; enginesByModel: Engine[]; }
-interface IGetEnginesByModelFailedAction { readonly type: typeof GET_ENGINES_BY_MODEL_FAILED; }
-
-interface IGetTransmissionsByModelAction { readonly type: typeof GET_TRANSMISSIONS_BY_MODEL; }
-interface IGetTransmissionsByModelSuccessAction { readonly type: typeof GET_TRANSMISSIONS_BY_MODEL_SUCCEED; transmissionsByModel: Transmission[]; }
-interface IGetTransmissionsByModelFailedAction { readonly type: typeof GET_TRANSMISSIONS_BY_MODEL_FAILED; }
-
-interface IGetDrivesByModelAction { readonly type: typeof GET_DRIVES_BY_MODEL; }
-interface IGetDrivesByModelSuccessAction { readonly type: typeof GET_DRIVES_BY_MODEL_SUCCEED; drivesByModel: Drive[]; }
-interface IGetDrivesByModelFailedAction { readonly type: typeof GET_DRIVES_BY_MODEL_FAILED; }
+type TGetListings = IGetListingsAction | IGetListingsActionSuccess | IGetListingsActionFailure;
 
 
-interface IGetColorsByModelAction { readonly type: typeof GET_COLORS_BY_MODEL; }
-interface IGetColorsByModelSuccessAction { readonly type: typeof GET_COLORS_BY_MODEL_SUCCEED; colorsByModel: Color[]; }
-interface IGetColorsByModelFailedAction { readonly type: typeof GET_COLORS_BY_MODEL_FAILED; }
+interface IUpdateSearchParametersAction {
+    readonly type: typeof UPDATE_SEARCH_PARAMETERS;
+    payload: IParametersSearch;
+}
 
-interface IGetBodyTypesByModelAction { readonly type: typeof GET_BODYTYPES_BY_MODEL; }
-interface IGetBodyTypesByModelSuccessAction { readonly type: typeof GET_BODYTYPES_BY_MODEL_SUCCEED; bodyTypesByModel: BodyType[]; }
-interface IGetBodyTypesByModelFailedAction { readonly type: typeof GET_BODYTYPES_BRAND_FAILED; }
+interface ISetActiveTabAction {
+    readonly type: typeof SET_ACTIVE_TAB;
+    activeTab: string;
+}
 
-interface ISetActiveModelAction { readonly type: typeof SET_ACTIVE_MODEL; activeModel: Model | null; }
-interface ISetActiveBrandAction { readonly type: typeof SET_ACTIVE_BRAND; activeBrand: Brand | null; }
-interface ISetActiveDriveAction { readonly type: typeof SET_ACTIVE_DRIVE; activeDrive: Drive | null; }
-interface ISetActiveEngineAction { readonly type: typeof SET_ACTIVE_ENGINE; activeEngine: Engine | null; }
-interface ISetActiveBodyTypeAction { readonly type: typeof SET_ACTIVE_BODYTYPE; activeBodyType: BodyType | null; }
-interface ISetActiveColorAction { readonly type: typeof SET_ACTIVE_COLOR; activeColor: Color | null; }
-interface ISetActiveTransmissionAction { readonly type: typeof SET_ACTIVE_TRANSMISSION; activeTransmission: Transmission | null; }
-interface ISetActivePriceAction { readonly type: typeof SET_ACTIVE_PRICE; activePrice: string | null; }
-interface ISetActiveMileageAction { readonly type: typeof SET_ACTIVE_MILEAGE; activeMileage: number | null; }
-interface ISetActivePhotosAction { readonly type: typeof SET_ACTIVE_PHOTOS; activePhotos: string[] | null; }
-interface ISetActivePlaceAction { readonly type: typeof SET_ACTIVE_PLACE; activePlace: string | null; }
-interface ISetActiveYearAction { readonly type: typeof SET_ACTIVE_YEAR; activeYear: number | null; }
-interface ISetActiveVINAction { readonly type: typeof SET_ACTIVE_VIN; activeVIN: string | null; }
-interface ISetActiveOwnersCountAction { readonly type: typeof SET_ACTIVE_OWNERSCOUNT; activeOwnersCount: number | null; }
-interface ISetActiveExchangeAction { readonly type: typeof SET_ACTIVE_EXCHANGE; activeExchange: boolean | null; }
-interface ISetActiveDescriptionAction { readonly type: typeof SET_ACTIVE_DESCRIPTION; activeDescription: string | null; }
-interface ISetActivePTSAction { readonly type: typeof SET_ACTIVE_PTS; activePTS: string | null; }
+interface IGetBrandsListingsAction {
+    readonly type: typeof GET_BRANDS_LISTINGS;
+}
+interface IGetBrandsListingsSuccessAction {
+    readonly type: typeof GET_BRANDS_LISTINGS_SUCCEED;
+    brands: Brand[];
+}
+interface IGetBrandsListingsFailedAction {
+    readonly type: typeof GET_BRANDS_LISTINGS_FAILED;
+}
+export type TGetBrandsListingsAction = IGetBrandsListingsAction | IGetBrandsListingsSuccessAction | IGetBrandsListingsFailedAction;
 
-type TCarSettingsActions = ISetActiveModelAction | ISetActiveBrandAction | ISetActiveDriveAction | ISetActiveEngineAction | ISetActiveBodyTypeAction |
-    ISetActiveColorAction | ISetActiveTransmissionAction | ISetActivePriceAction | ISetActiveMileageAction |
-    ISetActivePhotosAction | ISetActivePlaceAction | ISetActiveYearAction | ISetActiveVINAction |
-    ISetActiveOwnersCountAction | ISetActiveExchangeAction | ISetActiveDescriptionAction | ISetActivePTSAction;
+interface IGetModelsByBrandListingsAction { readonly type: typeof GET_MODELS_BY_BRAND_LISTINGS; }
+interface IGetModelsByBrandListingsSuccessAction { readonly type: typeof GET_MODELS_BY_BRAND_LISTINGS_SUCCEED; models: Model[]; }
+interface IGetModelsByBrandListingsFailedAction { readonly type: typeof GET_MODELS_BY_BRAND_LISTINGS_FAILED; }
+export type TGetModelsByBrandListingsAction = IGetModelsByBrandListingsAction | IGetModelsByBrandListingsSuccessAction | IGetModelsByBrandListingsFailedAction;
 
-export type TListingActionTypes =
-    | IAddListingRequestAction
-    | IAddListingSuccessAction
-    | IAddListingFailureAction
-    | IGetBodyTypesByModelAction | IGetBodyTypesByModelSuccessAction | IGetBodyTypesByModelFailedAction
-    | IGetColorsByModelAction | IGetColorsByModelSuccessAction | IGetColorsByModelFailedAction
-    | IGetEnginesByModelAction | IGetEnginesByModelSuccessAction | IGetEnginesByModelFailedAction
-    |   IGetTransmissionsByModelAction | IGetTransmissionsByModelSuccessAction | IGetTransmissionsByModelFailedAction
-    | IGetDrivesByModelAction | IGetDrivesByModelSuccessAction | IGetDrivesByModelFailedAction  | TCarSettingsActions;
+interface IGetEnginesByModelListingsAction { readonly type: typeof GET_ENGINES_BY_MODEL_LISTINGS; }
+interface IGetEnginesByModelListingsSuccessAction { readonly type: typeof GET_ENGINES_BY_MODEL_LISTINGS_SUCCEED; enginesByModel: Engine[]; }
+interface IGetEnginesByModelListingsFailedAction { readonly type: typeof GET_ENGINES_BY_MODEL_LISTINGS_FAILED; }
+export type TGetEnginesByModelListingsAction = IGetEnginesByModelListingsAction | IGetEnginesByModelListingsSuccessAction | IGetEnginesByModelListingsFailedAction;
+
+interface IGetTransmissionsByModelListingsAction { readonly type: typeof GET_TRANSMISSIONS_BY_MODEL_LISTINGS; }
+interface IGetTransmissionsByModelListingsSuccessAction { readonly type: typeof GET_TRANSMISSIONS_BY_MODEL_LISTINGS_SUCCEED; transmissionsByModel: Transmission[]; }
+interface IGetTransmissionsByModelListingsFailedAction { readonly type: typeof GET_TRANSMISSIONS_BY_MODEL_LISTINGS_FAILED; }
+
+interface IGetDrivesByModelListingsAction { readonly type: typeof GET_DRIVES_BY_MODEL_LISTINGS; }
+interface IGetDrivesByModelListingsSuccessAction { readonly type: typeof GET_DRIVES_BY_MODEL_LISTINGS_SUCCEED; drivesByModel: Drive[]; }
+interface IGetDrivesByModelListingsFailedAction { readonly type: typeof GET_DRIVES_BY_MODEL_LISTINGS_FAILED; }
+
+interface IGetColorsByModelListingsAction { readonly type: typeof GET_COLORS_BY_MODEL_LISTINGS; }
+interface IGetColorsByModelListingsSuccessAction { readonly type: typeof GET_COLORS_BY_MODEL_LISTINGS_SUCCEED; colorsByModel: Color[]; }
+interface IGetColorsByModelListingsFailedAction { readonly type: typeof GET_COLORS_BY_MODEL_LISTINGS_FAILED; }
+
+interface IGetBodyTypesByModelListingsAction { readonly type: typeof GET_BODYTYPES_BY_MODEL_LISTINGS; }
+interface IGetBodyTypesByModelListingsSuccessAction { readonly type: typeof GET_BODYTYPES_BY_MODEL_LISTINGS_SUCCEED; bodyTypesByModel: BodyType[]; }
+interface IGetBodyTypesByModelListingsFailedAction { readonly type: typeof GET_BODYTYPES_BY_MODEL_LISTINGS_FAILED; }
+interface IResetModelsByBrandAction { readonly type: typeof RESET_MODELS_BY_BRAND; }
+
+export type TGetTransmissionsByModelListingsAction = IGetTransmissionsByModelListingsAction | IGetTransmissionsByModelListingsSuccessAction | IGetTransmissionsByModelListingsFailedAction;
+export type TGetBodyTypesByModelListingsAction = IGetBodyTypesByModelListingsAction | IGetBodyTypesByModelListingsSuccessAction | IGetBodyTypesByModelListingsFailedAction;
+export type TGetColorsByModelListingsAction = IGetColorsByModelListingsAction | IGetColorsByModelListingsSuccessAction | IGetColorsByModelListingsFailedAction;
+export type TGetDrivesByModelListingsAction = IGetDrivesByModelListingsAction | IGetDrivesByModelListingsSuccessAction | IGetDrivesByModelListingsFailedAction;
+
+
+
+export type TListings = TGetListings | IUpdateSearchParametersAction | ISetActiveTabAction | TGetTransmissionsByModelListingsAction |
+    TGetModelsByBrandListingsAction | TGetEnginesByModelListingsAction | TGetBrandsListingsAction |
+    TGetBodyTypesByModelListingsAction | TGetColorsByModelListingsAction | TGetDrivesByModelListingsAction | IResetModelsByBrandAction;

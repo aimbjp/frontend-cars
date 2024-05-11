@@ -9,6 +9,7 @@ import Chat from "../chat/chat";
 import {CarsDetailsPage} from "../../pages/сars";
 import {AppHeader} from "../header/header";
 import {ListingAddPage} from "../../pages/listings/listing-add-page";
+import {ListingsPage} from "../../pages/listings/listings-page";
 
 
 function App() {
@@ -34,7 +35,9 @@ function App() {
                 <Route path='/profile/favorites' element={<OnlyAuth component={ <ProfilePage element={<ProfileMain />} /> } /> } />
 
                 <Route path='/car/add-details' element={<OnlyAuth component={<CarsDetailsPage />} /> } />
-                <Route path='/listings/add' element={<ListingAddPage />} />
+                <Route path='/listings/add' element={<OnlyAuth component={<ListingAddPage />} /> } />
+
+                <Route path='/listings' element={<ListingsPage />} />
 
                 <Route path='/*' element={<HomePage />}/>
             </Routes>

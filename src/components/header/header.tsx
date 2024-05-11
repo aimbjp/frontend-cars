@@ -40,6 +40,9 @@ export const AppHeader: FC = () => {
                 <ListItem button component={RouterLink} to="/listings/add">
                     <ListItemText primary="Добавить объявление" />
                 </ListItem>
+                <ListItem button component={RouterLink} to="/listings">
+                    <ListItemText primary="Список объявлений" />
+                </ListItem>
             </List>
         </Box>
     );
@@ -67,6 +70,7 @@ export const AppHeader: FC = () => {
                             <Button color="inherit" component={RouterLink} to="/chat">Чат</Button>
                             <Button color="inherit" component={RouterLink} to="/car/add-details">Добавить детали</Button>
                             <Button color="inherit" component={RouterLink} to="/listings/add">Добавить объявление</Button>
+                            <Button color="inherit" component={RouterLink} to="/listings">Список объявлений</Button>
                         </Box>
                     </Toolbar>
                 </Container>

@@ -70,7 +70,9 @@ export async function request(url: string, options?: RequestInit) {
                 }
             } else {
                 // Для объектов Record<string, string>
-                options.headers['Authorization'] = `Bearer ${refreshData.accessToken}`;
+                if ( !options.headers['Authorization'] ){
+                    options.headers['Authorization'] = `Bearer ${refreshData.accessToken}`;
+                }
             }
 
             const res = await fetch(url, options);

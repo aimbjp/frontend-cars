@@ -1,15 +1,12 @@
+import {IParametersSearch} from "../../type/listings/listings";
 import {request} from "./user";
-import {IListingData} from "../../type/listings/listings";
+import {LISTINGS, URL_API} from "./links";
 
-export const addListing = async (listingData: IListingData) => {
-    const response = await request('/listings', {
+
+export const fetchGetListings = (parameters: IParametersSearch | null) => {
+    return request(LISTINGS, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(listingData),
-    });
-    if (!response.ok) {
-        console.log(listingData)
-        throw new Error('Failed to add listing');
-    }
-    return await response.json();
-};
+        body: parameters ? (JSON.stringify(parameters)) : (JSON.stringify({noParams: true})),
+    })
+}

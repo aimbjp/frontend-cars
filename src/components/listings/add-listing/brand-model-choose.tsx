@@ -1,17 +1,14 @@
-import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
+import React, { FC, useEffect, useState} from "react";
 import {
     Autocomplete,
     Box,
-    Button,
     Checkbox,
     FormControlLabel,
-    IconButton,
-    Slider,
     TextField,
     Typography
 } from "@mui/material";
-import { useDispatch, useSelector } from "../../services/hooks";
-import { Brand, Model, Engine, Drive, Transmission, BodyType, Color } from "../../type/car/cars-details";
+import { useDispatch, useSelector } from "../../../services/hooks";
+import { Brand, Model, Engine, Drive, Transmission, BodyType, Color } from "../../../type/car/cars-details";
 import { motion, Variants } from 'framer-motion';
 import {
     setActiveBrand,
@@ -31,19 +28,13 @@ import {
     setActiveMileage,
     setActiveOwnersCount,
     setActiveVIN,
-    setActivePlace, setActiveYear, setActivePhotos
-} from "../../services/thunks/listings";
-import {getBrands, getModelsByBrandId} from "../../services/thunks/cars-details";
-import {styled} from "@mui/system";
-import {URL_API} from "../../services/api/links";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {addListing} from "../../services/api/listings";
+    setActivePlace, setActiveYear,
+} from "../../../services/thunks/listing-add";
+import {getBrands, getModelsByBrandId} from "../../../services/thunks/cars-details";
+import {AddListingPhoto} from "./add-listing-photo";
+import {AddListingAddButton} from "./add-listing-add-button";
 
-const PreviewImage = styled('img')({
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover'
-});
+
 
 const containerVariants = {
     hidden: {opacity: 0, y: 20},
@@ -69,11 +60,9 @@ export const CarDetailsForm: FC = () => {
         activeColor, activeMileage,
         activeDescription, activeExchange, activeImages, activeOwnersCount, activePlace, activePrice, activePTS, activeVIN, activeYear,
         colorsByModel, enginesByModel, drivesByModel, transmissionsByModel, bodyTypesByModel,
-        user
     } = useSelector(state => ({
         ...state.carsDetailsReducer,
-        ...state.listingReducer,
-            ...state.userReducer
+        ...state.listingReducer
     }));
 
     useEffect(() => {
@@ -132,69 +121,6 @@ export const CarDetailsForm: FC = () => {
         initial: { opacity: 0, y: 20 },
         animate: { opacity: 1, y: 0 },
         exit: { opacity: 0, y: -20 }
-    };
-
-
-
-
-
-
-
-
-
-
-
-    const [selectedFiles, setSelectedFiles] = useState<{ file: File, preview: string }[]>([]);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const filesArray = Array.from(event.target.files).map(file => ({
-                file,
-                preview: URL.createObjectURL(file)
-            }));
-            setSelectedFiles(prev => [...prev, ...filesArray]);
-        }
-    };
-
-    const uploadFiles = async () => {
-        const formData = new FormData();
-        selectedFiles.forEach(fileObj => {
-            formData.append('files', fileObj.file);
-        });
-
-        try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            if (response.ok) {
-                const data = await response.json();
-                dispatch(setActivePhotos(activeImages ? [...activeImages, ...data.filesUrls] : [...data.filesUrls]));
-            } else {
-                throw new Error('Network response was not ok.');
-            }
-        } catch (error) {
-            console.error("Error uploading files:", error);
-        }
-    };
-
-    const removeSelectedFile = (index: number) => {
-        setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-        removeActiveImage(index);
-    };
-
-    const removeActiveImage = (index: number) => {
-        const updatedImages = activeImages?.filter((_, i) => i !== index);
-        dispatch(setActivePhotos(updatedImages || null));
-    };
-
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
     };
 
     return (
@@ -596,108 +522,9 @@ export const CarDetailsForm: FC = () => {
                 </>
             )}
 
-            <motion.div
-                initial={{opacity: 0, y: 20}}
-                animate={{opacity: 1, y: 0}}
-                transition={{duration: 0.5}}
-                style={{width: '100%'}}
-            >
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 2,
-                    margin: 'auto',
-                    maxWidth: 700,
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                    borderRadius: '16px',
-                    backgroundColor: 'white',
-                    mt: 4,
-                    gap: 2
-                }}>
+            <AddListingPhoto/>
 
-
-
-                        <Typography variant="h6">Фото</Typography>
-                        <Button variant="outlined" onClick={() => fileInputRef.current?.click()}>
-                            Загрузить фото
-                        </Button>
-                        <input
-                            type="file"
-                            multiple
-                            onChange={handleFileChange}
-                            style={{ display: 'none' }}
-                            ref={fileInputRef}
-                        />
-                        <Button onClick={uploadFiles} variant="contained" sx={{ mt: 2 }}>
-                            Подтвердить загрузку
-                        </Button>
-
-                        {/*{activeImages && activeImages.length > 0 && (*/}
-                        {/*    <Slider {...settings}>*/}
-                        {/*        {activeImages?.map((url, index) => (*/}
-                        {/*            <div key={index}>*/}
-                        {/*                <PreviewImage src={url} alt={`Active Image ${index + 1}`} />*/}
-                        {/*                <IconButton onClick={() => removeActiveImage(index)} size="small" sx={{ position: 'absolute', top: 0, right: 0 }}>*/}
-                        {/*                    <DeleteIcon />*/}
-                        {/*                </IconButton>*/}
-                        {/*            </div>*/}
-                        {/*        ))}*/}
-                        {/*    </Slider>*/}
-                        {/*)}*/}
-
-                        <Typography variant="h6" sx={{ mt: 2 }}>Предпросмотр фото</Typography>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                            {selectedFiles.map((file, index) => (
-                                <Box key={index} sx={{ width: 100, height: 100, position: 'relative' }}>
-                                    <PreviewImage src={file.preview} alt="Preview" />
-                                    <IconButton onClick={() => removeSelectedFile(index)} size="small" sx={{ position: 'absolute', top: 0, right: 0 }}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Box>
-                            ))}
-                        </Box>
-                    </Box>
-            </motion.div>
-
-            <Button onClick={() => {
-                addListing({
-                               modelId: activeModel?.modelId || 1,
-                engineId: activeEngine?.engineId || 1,
-                transmissionId: activeTransmission?.transmissionId || 1,
-                driveId: activeDrive?.driveId || 1,
-                bodyTypeId: activeBodyType?.bodyTypeId || 1,
-                colorId: activeColor?.colorId || 1,
-                year: activeYear || 1,
-                price: activePrice || '',
-                VIN: activeVIN || '',
-                place: activePlace || "",
-                ownersCount: activeOwnersCount || 1,
-                description: activeDescription || "",
-                userId: parseInt(user.userId || "1"),
-                images: activeImages ? [...activeImages] : null,
-            })}}
-                    variant="contained"
-            // hidden={activeBrand && activeModel && activeBodyType && activeEngine && activeDrive && activeTransmission && activeColor && activePrice && activeMileage && activeYear}
-            disabled={!(activeBrand && activeModel && activeBodyType && activeEngine && activeDrive && activeTransmission && activeColor && activePrice && activeMileage && activeYear)}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: 2,
-                        margin: 'auto',
-                        maxWidth: 700,
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                        borderRadius: '16px',
-                        backgroundColor: 'white',
-                        mt: 4,
-                        gap: 2
-                    }}
-            >
-                Добавить объявление
-            </Button>
+            <AddListingAddButton />
         </>
     );
 };
