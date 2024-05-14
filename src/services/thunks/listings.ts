@@ -1,6 +1,7 @@
 import {IParametersSearch} from "../../type/listings/listings";
 import {AppDispatch, AppThunkAction} from "../types";
 import {
+    CHANGE_LISTING_STATUS, CHANGE_LISTING_STATUS_FAILED, CHANGE_LISTING_STATUS_SUCCEED,
     GET_BODYTYPES_BY_MODEL_LISTINGS,
     GET_BODYTYPES_BY_MODEL_LISTINGS_FAILED,
     GET_BODYTYPES_BY_MODEL_LISTINGS_SUCCEED,
@@ -18,17 +19,21 @@ import {
     GET_ENGINES_BY_MODEL_LISTINGS_SUCCEED,
     GET_LISTINGS,
     GET_LISTINGS_FAILURE,
+    GET_LISTINGS_STATUSES,
+    GET_LISTINGS_STATUSES_FAILED,
+    GET_LISTINGS_STATUSES_SUCCEED,
     GET_LISTINGS_SUCCESS,
     GET_MODELS_BY_BRAND_LISTINGS,
     GET_MODELS_BY_BRAND_LISTINGS_FAILED,
     GET_MODELS_BY_BRAND_LISTINGS_SUCCEED,
     GET_TRANSMISSIONS_BY_MODEL_LISTINGS,
     GET_TRANSMISSIONS_BY_MODEL_LISTINGS_FAILED,
-    GET_TRANSMISSIONS_BY_MODEL_LISTINGS_SUCCEED, RESET_MODELS_BY_BRAND,
+    GET_TRANSMISSIONS_BY_MODEL_LISTINGS_SUCCEED,
+    RESET_MODELS_BY_BRAND,
     SET_ACTIVE_TAB,
     UPDATE_SEARCH_PARAMETERS
 } from "../action-types/listings";
-import {fetchGetListings} from "../api/listings";
+import {fetchGetListings, fetchGetListingsStatuses, fetchSetNewStatusListing} from "../api/listings";
 import {request} from "../api/user";
 import {fetchGetBrands} from "../api/car/car-deatails";
 
@@ -195,3 +200,36 @@ export const getModelsByBrandId = (brandIds: string[]): AppThunkAction => dispat
 
 
 export const resetModelsByBrandId = (): AppThunkAction => dispatch => dispatch({type: RESET_MODELS_BY_BRAND})
+
+
+export const getListingsStatuses = (): AppThunkAction => dispatch => {
+    dispatch({type: GET_LISTINGS_STATUSES})
+
+    fetchGetListingsStatuses()
+        .then((res) => {
+            if (res.success) {
+                dispatch({type: GET_LISTINGS_STATUSES_SUCCEED, listing_statuses: res.listingsStatuses})
+            } else {
+                dispatch({type: GET_LISTINGS_STATUSES_FAILED})
+            }
+        })
+        .catch(err => {
+            dispatch({type: GET_LISTINGS_STATUSES_FAILED})
+        })
+}
+
+export const setListingStatus = (userId: string, listStatusId: string): AppThunkAction => dispatch => {
+    dispatch({type: CHANGE_LISTING_STATUS})
+
+    fetchSetNewStatusListing(userId, listStatusId)
+        .then((res) => {
+            if (res.success) {
+                dispatch({type: CHANGE_LISTING_STATUS_SUCCEED, statusList: res.listing.listStatus.type})
+            } else {
+                dispatch({type: CHANGE_LISTING_STATUS_FAILED})
+            }
+        })
+        .catch(err => {
+            dispatch({type: CHANGE_LISTING_STATUS_FAILED})
+        })
+}

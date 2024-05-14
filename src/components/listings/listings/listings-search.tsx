@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, ChangeEvent } from "react";
 import {
-    TextField, Button, Box, Typography, Autocomplete, Collapse, Grid
+    TextField, Button, Box, Typography, Autocomplete, Collapse, Grid, useMediaQuery, Theme
 } from "@mui/material";
 import { useDispatch, useSelector } from "../../../services/hooks";
 import {
@@ -21,6 +21,8 @@ export const ListingsSearch: FC = () => {
     const { engines, drives, transmissions, colors, bodyTypes } = useSelector((store) => store.carsDetailsReducer);
     const [localSearchParams, setLocalSearchParams] = useState<IParametersSearch>(parameters);
 
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
     useEffect(() => {
         dispatch(getBrands());
         dispatch(getDrives());
@@ -31,7 +33,9 @@ export const ListingsSearch: FC = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(getListings(parameters));
+        if (parameters.page === "1") {
+            dispatch(getListings(parameters));
+        }
     }, [parameters]);
 
 
@@ -43,14 +47,15 @@ export const ListingsSearch: FC = () => {
             [name]: value === '' ? undefined : value
         }));
 
-        dispatch(updateSearchParameters({...localSearchParams, [name]: value === '' ? undefined : value}));
+        dispatch(updateSearchParameters({...localSearchParams, [name]: value === '' ? undefined : value, page: "1"}));
 
     };
 
     const handleSubmit = () => {
-        dispatch(updateSearchParameters(localSearchParams));
+        dispatch(updateSearchParameters({...localSearchParams, page: "1"}))
         dispatch(setActiveTab('listings'));
     };
+
 
 
 
@@ -251,9 +256,9 @@ export const ListingsSearch: FC = () => {
             <Box sx={{display: 'grid', justifyContent: 'center'}}>
                 {listings && <Typography>Всего объявллений: {listings.total}</Typography>}
 
-                <Button variant="contained" color="primary" onClick={handleSubmit}>
+                {isMobile && <Button variant="contained" color="primary" onClick={handleSubmit}>
                     Поиск
-                </Button>
+                </Button>}
             </Box>
         </Box>
 

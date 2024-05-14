@@ -6,7 +6,7 @@ export const fetchUsers = () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
+            'Authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
         },
     });
 }

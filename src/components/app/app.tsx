@@ -10,6 +10,7 @@ import {CarsDetailsPage} from "../../pages/сars";
 import {AppHeader} from "../header/header";
 import {ListingAddPage} from "../../pages/listings/listing-add-page";
 import {ListingsPage} from "../../pages/listings/listings-page";
+import {ListingShowPage} from "../../pages/listings/listings-show-page";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                 <Route path='/listings/add' element={<OnlyAuth component={<ListingAddPage />} /> } />
 
                 <Route path='/listings' element={<ListingsPage />} />
+                <Route path='/listing/:listingId' element={<ListingShowPage />} />
 
                 <Route path='/*' element={<HomePage />}/>
             </Routes>

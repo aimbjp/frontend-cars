@@ -403,7 +403,6 @@ export function getUserInfo (): AppThunkAction {
             }
         } catch (error) {
             dispatch({type: GET_USER_INFO_FAILED});
-            throw error;
         }
     }
 }

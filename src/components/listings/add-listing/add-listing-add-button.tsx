@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from "react";
 import {addListing, setActiveBrand, setActivePhotos} from "../../../services/thunks/listing-add";
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, TextField, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "../../../services/hooks";
 import {LoaderWithoutMargin} from "../../elements";
 
@@ -15,7 +15,7 @@ export const AddListingAddButton: FC = () => {
         activeTransmission,
         activeBodyType,
         activeColor, activeMileage,
-        activeDescription, activeExchange, activeImages, activeOwnersCount, activePlace, activePrice, activeVIN, activeYear,
+        activeDescription, activeImages, activeOwnersCount, activePlace, activePrice, activeVIN, activeYear,
         user,
         loading, loadingSuccess
     } = useSelector(state => ({
@@ -28,9 +28,9 @@ export const AddListingAddButton: FC = () => {
             if (loadingSuccess) {
                 dispatch(setActiveBrand(null));
                 dispatch(setActivePhotos(null));
-                dispatch(setActivePhotos(null));
+
             }
-        }, [loadingSuccess]
+        }, [dispatch, loadingSuccess]
     )
 
 
@@ -74,7 +74,11 @@ export const AddListingAddButton: FC = () => {
         >
             Добавить объявление
         </Button>
-            {loading && <LoaderWithoutMargin />}
+            {loading &&
+                <div style={{display: 'flex', justifyContent: 'center', padding: '20px'}}>
+                    <CircularProgress/>
+                </div>
+            }
             {!loading && loadingSuccess && <Typography> Объявление добавлено </Typography>}
         </Box>
     )

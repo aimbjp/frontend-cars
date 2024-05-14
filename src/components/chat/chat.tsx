@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import { fetchUsers } from '../../services/api/users';
 import { IUser } from "../../type/user/user-types";
 import {
@@ -9,12 +9,9 @@ import { useSelector } from "../../services/hooks";
 import { IMessage } from "../../type/chat-types";
 import io from "socket.io-client";
 import ModalImage from "react-modal-image";
-import {Link} from "react-router-dom";
-import {URL_API} from "../../services/api/links";
+import { URL_API } from "../../services/api/links";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-
-
 
 // Стилизация текста сообщения
 const MessageText = styled(({ fromSelf, ...otherProps }: TypographyProps & { fromSelf?: boolean }) => (
@@ -43,16 +40,21 @@ const StyledList = styled(List)(({ theme }) => ({
     paddingRight: '4px', // Для скроллбара
 }));
 
-const Chat = () => {
+interface ChatProps {
+    id?: string | null;
+}
+
+const Chat: FC<ChatProps> = ({ id = null }) => {
     const [users, setUsers] = useState<Array<IUser>>([]);
-    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
     const [messages, setMessages] = useState<Array<IMessage & { fromSelf?: boolean }>>([]);
     const [currentMessage, setCurrentMessage] = useState('');
     const currentUser = useSelector((state) => state.userReducer.user);
     const socketRef = useRef<ReturnType<typeof io> | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null); // Для автоскролла
-    const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [mediaUrls, setMediaUrls] = useState<string[]>([]);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(id);
 
     useEffect(() => {
         socketRef.current = io({
@@ -100,13 +102,11 @@ const Chat = () => {
     }, [selectedUserId, currentUser.userId]);
 
     useEffect(() => {
-
         const timer = setTimeout(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 1000);
 
         return () => clearTimeout(timer);
-
     }, [messages]);
 
     const handleSendMessage = async (e: React.FormEvent) => {
@@ -127,8 +127,8 @@ const Chat = () => {
                     ...prevMessages,
                     {
                         content: currentMessage,
-                        fromSelf: true, sender_id:
-                            currentUser.userId || '',
+                        fromSelf: true,
+                        sender_id: currentUser.userId || '',
                         receiver_id: selectedUserId,
                         timestamp: new Date().toISOString(),
                         id: `temp-${Date.now()}`,
@@ -136,34 +136,20 @@ const Chat = () => {
                     }
                 ]);
 
-
                 setCurrentMessage('');
                 setMediaUrls([]);
                 setSelectedFiles([]);
                 setFileInputKey(Date.now());
             }
         }
-
     };
-
-
-    const handleSelectUser = (userId: string) => {
-        setSelectedUserId(userId);
-        socketRef.current?.emit('getMessagesHistory', { partnerId: userId });
-    };
-
-    const [mediaUrls, setMediaUrls] = useState<string[]>([]);
-
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
     const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const newFiles = Array.from(event.target.files);
             setSelectedFiles(prevFiles => [...prevFiles, ...newFiles]);
         }
-
         setFileInputKey(Date.now());
-
     };
 
     const handleFileDelete = (index: number) => {
@@ -186,7 +172,7 @@ const Chat = () => {
                 console.log(data);
                 return data.filesUrls;
             } else {
-                throw new Error('Network response was not ok.');
+                console.log('Network response was not ok.');
             }
         } catch (error) {
             console.error("Ошибка при загрузке файлов:", error);
@@ -196,19 +182,9 @@ const Chat = () => {
 
     const [fileInputKey, setFileInputKey] = useState(Date.now());
 
-    const resetFileInput = () => {
-        setFileInputKey(Date.now());
-    };
-
-
     return (
         <Container maxWidth="sm" sx={{ height: '80vh', display: 'flex', flexDirection: 'column' }}>
-            <Link to={'/profile'}>Profile</Link>
-            <br/>
-            <Link to={'/'}>home page</Link>
-            <br/>
-
-            <Select value={selectedUserId || ''} onChange={(e) => handleSelectUser(e.target.value)} fullWidth sx={{ marginBottom: 2 }}>
+            <Select value={selectedUserId || ''} onChange={(e) => setSelectedUserId(e.target.value)} fullWidth sx={{ marginBottom: 2 }}>
                 <MenuItem value="">Выберите пользователя...</MenuItem>
                 {users.map((user) => (
                     <MenuItem key={user.userId} value={user.userId}>{user.username}</MenuItem>
@@ -224,61 +200,60 @@ const Chat = () => {
                                         {message.content}
                                     </MessageText>}
 
-                                { message.media_url &&     <MessageText fromSelf={message.fromSelf ?? false}>
-                                            {message.media_url.map((url, index) => (
-                                                <ModalImage
-                                                    key={index}
-                                                    small={url}
-                                                    large={url}
-                                                    alt="Предварительный просмотр изображения"
-                                                />
-                                                ))}
-                                        </MessageText>
-                                }
+                                {message.media_url && <MessageText fromSelf={message.fromSelf ?? false}>
+                                    {message.media_url.map((url, index) => (
+                                        <ModalImage
+                                            key={index}
+                                            small={url}
+                                            large={url}
+                                            alt="Предварительный просмотр изображения"
+                                        />
+                                    ))}
+                                </MessageText>}
                             </div>
                         </Tooltip>
                     </ListItem>
                 ))}
                 <div ref={messagesEndRef} />
             </StyledList>
-            <Box component="form" onSubmit={handleSendMessage} sx={{mt: 'auto'}}>
+            <Box component="form" onSubmit={handleSendMessage} sx={{ mt: 'auto' }}>
                 <TextField
                     value={currentMessage}
                     onChange={(e) => setCurrentMessage(e.target.value)}
                     fullWidth
                     variant="outlined"
                     placeholder="Введите сообщение..."
-                    sx={{marginBottom: 1}}
+                    sx={{ marginBottom: 1 }}
                 />
                 <input
                     type="file"
                     multiple
                     onChange={handleFileSelect}
                     key={fileInputKey}
-                    style={{display: 'none'}}
+                    style={{ display: 'none' }}
                     ref={fileInputRef}
                 />
                 <Button onClick={() => fileInputRef.current?.click()}>Загрузить файлы</Button>
                 <div>
                     {selectedFiles.map((file, index) => (
-                        <Box key={index} sx={{display: 'flex', alignItems: 'center', margin: 1}}>
-                            <Avatar src={URL.createObjectURL(file)} sx={{width: 56, height: 56, marginRight: 2}}/>
-                            <Typography variant="body2" sx={{flexGrow: 1}}>{file.name}</Typography>
+                        <Box key={index} sx={{ display: 'flex', alignItems: 'center', margin: 1 }}>
+                            <Avatar src={URL.createObjectURL(file)} sx={{ width: 56, height: 56, marginRight: 2 }} />
+                            <Typography variant="body2" sx={{ flexGrow: 1 }}>{file.name}</Typography>
                             <IconButton onClick={() => handleFileDelete(index)} edge="end" aria-label="delete">
-                                <DeleteIcon/>
+                                <DeleteIcon />
                             </IconButton>
                             <IconButton onClick={() => fileInputRef.current?.click()} edge="end" aria-label="add files">
-                                <AddCircleOutlineIcon/>
+                                <AddCircleOutlineIcon />
                             </IconButton>
                         </Box>
                     ))}
                 </div>
-                <Button type="submit" variant="contained" color="primary"
-                        sx={{marginTop: '8px', width: '100%'}}>Отправить</Button>
+                <Button type="submit" variant="contained" color="primary" sx={{ marginTop: '8px', width: '100%' }}>
+                    Отправить
+                </Button>
             </Box>
         </Container>
-    )
-        ;
+    );
 };
 
 export default Chat;

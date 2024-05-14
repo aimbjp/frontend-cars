@@ -44,7 +44,9 @@ export async function request(url: string, options?: RequestInit) {
     } catch (err: unknown) {
         const errorMessage = typeof err === "object" && err !== null && "error" in err ? (err as ApiError).error : '';
 
-        if (errorMessage === "jwt expired") {
+        console.log(errorMessage);
+
+        if (errorMessage === "jwt expired" ) { //  || errorMessage === "jwt invalid"
             const refreshData = await refreshToken(); // Обновляем токен
 
             if (!options) {
@@ -142,7 +144,7 @@ export const fetchGetUserInfo = () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
+            'Authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
         },
     })
 }
@@ -152,7 +154,7 @@ export const fetchUpdateUserInfo = (payload: IProfileForm) => {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
+            'Authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
         body: JSON.stringify(payload),
     })
@@ -163,7 +165,7 @@ export const fetchChangePassword = (payload: IChangePassword) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
+            'Authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
         body: JSON.stringify(payload),
     })

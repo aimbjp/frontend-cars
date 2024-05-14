@@ -1,11 +1,18 @@
-import { IParametersSearch, ListingsResponse} from "../../type/listings/listings";
+import {IParametersSearch, ListingsResponse, ListStatus} from "../../type/listings/listings";
 import {TListings} from "../types/listings";
 import {
-    GET_BODYTYPES_BY_MODEL_LISTINGS, GET_BODYTYPES_BY_MODEL_LISTINGS_FAILED, GET_BODYTYPES_BY_MODEL_LISTINGS_SUCCEED,
+    CHANGE_LISTING_STATUS,
+    CHANGE_LISTING_STATUS_FAILED,
+    CHANGE_LISTING_STATUS_SUCCEED,
+    GET_BODYTYPES_BY_MODEL_LISTINGS,
+    GET_BODYTYPES_BY_MODEL_LISTINGS_FAILED,
+    GET_BODYTYPES_BY_MODEL_LISTINGS_SUCCEED,
     GET_BRANDS_LISTINGS,
     GET_BRANDS_LISTINGS_FAILED,
-    GET_BRANDS_LISTINGS_SUCCEED, GET_COLORS_BY_MODEL_LISTINGS,
-    GET_COLORS_BY_MODEL_LISTINGS_FAILED, GET_COLORS_BY_MODEL_LISTINGS_SUCCEED,
+    GET_BRANDS_LISTINGS_SUCCEED,
+    GET_COLORS_BY_MODEL_LISTINGS,
+    GET_COLORS_BY_MODEL_LISTINGS_FAILED,
+    GET_COLORS_BY_MODEL_LISTINGS_SUCCEED,
     GET_DRIVES_BY_MODEL_LISTINGS,
     GET_DRIVES_BY_MODEL_LISTINGS_FAILED,
     GET_DRIVES_BY_MODEL_LISTINGS_SUCCEED,
@@ -14,18 +21,21 @@ import {
     GET_ENGINES_BY_MODEL_LISTINGS_SUCCEED,
     GET_LISTINGS,
     GET_LISTINGS_FAILURE,
+    GET_LISTINGS_STATUSES,
+    GET_LISTINGS_STATUSES_FAILED,
+    GET_LISTINGS_STATUSES_SUCCEED,
     GET_LISTINGS_SUCCESS,
     GET_MODELS_BY_BRAND_LISTINGS,
     GET_MODELS_BY_BRAND_LISTINGS_FAILED,
     GET_MODELS_BY_BRAND_LISTINGS_SUCCEED,
     GET_TRANSMISSIONS_BY_MODEL_LISTINGS,
     GET_TRANSMISSIONS_BY_MODEL_LISTINGS_FAILED,
-    GET_TRANSMISSIONS_BY_MODEL_LISTINGS_SUCCEED, RESET_MODELS_BY_BRAND,
+    GET_TRANSMISSIONS_BY_MODEL_LISTINGS_SUCCEED,
+    RESET_MODELS_BY_BRAND,
     SET_ACTIVE_TAB,
     UPDATE_SEARCH_PARAMETERS
 } from "../action-types/listings";
 import {BodyType, Brand, Color, Drive, Engine, Model, Transmission} from "../../type/car/cars-details";
-
 
 
 export interface IListingsList {
@@ -66,12 +76,22 @@ export interface IListingsList {
     modelsByBrand: Model[],
     modelsLoading: boolean,
     modelsError: boolean,
+
+    listingsStatuses: ListStatus[] | null;
+    getListingsStatuses: boolean;
+    getListingsStatusesFailed: boolean;
+
+    listingStatus: ListStatus | null;
+    changeListingStatuses: boolean;
+    changeListingStatusesFailed: boolean;
+
+
 }
 
 const ListingsInitialState : IListingsList = {
     parameters: {
         page:  "1",
-        limit:  undefined,
+        limit:  "15",
         sort: undefined,
         order:  undefined,
         priceMin:  undefined,
@@ -122,13 +142,30 @@ const ListingsInitialState : IListingsList = {
     modelsByBrand: [],
     modelsLoading: false,
     modelsError: false,
+
+    listingsStatuses: [],
+    getListingsStatuses: false,
+    getListingsStatusesFailed: false,
+
+    listingStatus: null,
+    changeListingStatuses: false,
+    changeListingStatusesFailed: false,
 }
 
 export const listingsReducer = (state = ListingsInitialState, action: TListings) => {
     switch (action.type){
         case GET_LISTINGS: return {...state, listingsRequest: true};
-        case GET_LISTINGS_FAILURE: return {...state, error: action.error};
-        case GET_LISTINGS_SUCCESS: return {...state, listingRequestFailed: true, listings: action.listings};
+        case GET_LISTINGS_FAILURE: return {...state, error: action.error, listingsRequest: false};
+        case GET_LISTINGS_SUCCESS: return {...state, listingRequestFailed: true,
+            listings: {
+                ...state.listings,
+                page: action.listings.page,
+                data: action.listings.page !== 1 ? [...(state.listings?.data || []), ...action.listings.data]: action.listings.data,
+                last_page: action.listings.last_page,
+                total: action.listings.total,
+                success: action.listings.success,
+            },
+            listingsRequest: false};
 
         case UPDATE_SEARCH_PARAMETERS: return { ...state, parameters: {...state.parameters, ...action.payload} };
 
@@ -262,6 +299,14 @@ export const listingsReducer = (state = ListingsInitialState, action: TListings)
             };
 
         case RESET_MODELS_BY_BRAND: return {...state, modelsByBrand: []};
+
+        case GET_LISTINGS_STATUSES: return {...state, getListingsStatuses: true };
+        case GET_LISTINGS_STATUSES_SUCCEED: return {...state, getListingsStatuses: false, listingsStatuses: action.listing_statuses };
+        case GET_LISTINGS_STATUSES_FAILED: return {...state, getListingsStatuses: false, getListingsStatusesFailed: true};
+
+        case CHANGE_LISTING_STATUS: return {...state, changeListingStatuses: true};
+        case CHANGE_LISTING_STATUS_SUCCEED: return {...state, changeListingStatuses: false, listingStatus: action.statusList};
+        case CHANGE_LISTING_STATUS_FAILED: return {...state, changeListingStatuses: false};
 
         default: return state;
     }

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
-import {Box, Button, IconButton, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, IconButton, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {motion} from "framer-motion";
 import {setActivePhotos} from "../../../services/thunks/listing-add";
@@ -113,7 +113,11 @@ export const AddListingPhoto: FC = () => {
                     Подтвердить загрузку
                 </Button>
 
-                {uploadingPhotos && <LoaderWithoutMargin />}
+                {uploadingPhotos &&
+                    <div style={{display: 'flex', justifyContent: 'center', padding: '20px'}}>
+                        <CircularProgress/>
+                    </div>
+                }
 
                 <Typography variant="h6" sx={{mt: 2}}>Предпросмотр фото</Typography>
                 <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 2}}>

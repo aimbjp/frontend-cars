@@ -10,3 +10,30 @@ export const fetchGetListings = (parameters: IParametersSearch | null) => {
         body: parameters ? (JSON.stringify(parameters)) : (JSON.stringify({noParams: true})),
     })
 }
+
+export const getListingById = (id: string) => {
+    return request(`${LISTINGS}/${id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+export const fetchSetNewStatusListing = (id: string, statusId: string) => {
+    return request(`${LISTINGS}/status`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
+        },
+        body: JSON.stringify({statusId, listingId: id}),
+    })
+}
+
+export const fetchGetListingsStatuses = () => {
+    return request(`${LISTINGS}/statuses`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}

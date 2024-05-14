@@ -61,6 +61,8 @@ export interface IParametersSearch {
 }
 
 
+
+
 interface Brand {
     brandId: number;
     name: string;
@@ -111,6 +113,11 @@ export interface Car {
 
 export interface Listing {
     listingId: number;
+    user?: {
+        userId: string;
+        name: string;
+        contactInfo: any;
+    }
     price: string;
     tax: string | null;
     pts: string | null;
@@ -124,6 +131,7 @@ export interface Listing {
     views: number;
     description: string;
     car: Car;
+    listStatus?: ListStatus;
 }
 
 export interface ListingsResponse {

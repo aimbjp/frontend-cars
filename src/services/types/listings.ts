@@ -1,4 +1,5 @@
 import {
+    CHANGE_LISTING_STATUS, CHANGE_LISTING_STATUS_FAILED, CHANGE_LISTING_STATUS_SUCCEED,
     GET_BODYTYPES_BY_MODEL_LISTINGS, GET_BODYTYPES_BY_MODEL_LISTINGS_FAILED, GET_BODYTYPES_BY_MODEL_LISTINGS_SUCCEED,
     GET_BRANDS_LISTINGS,
     GET_BRANDS_LISTINGS_FAILED,
@@ -13,7 +14,7 @@ import {
     GET_ENGINES_BY_MODEL_LISTINGS_FAILED,
     GET_ENGINES_BY_MODEL_LISTINGS_SUCCEED,
     GET_LISTINGS,
-    GET_LISTINGS_FAILURE,
+    GET_LISTINGS_FAILURE, GET_LISTINGS_STATUSES, GET_LISTINGS_STATUSES_FAILED, GET_LISTINGS_STATUSES_SUCCEED,
     GET_LISTINGS_SUCCESS,
     GET_MODELS_BY_BRAND_LISTINGS,
     GET_MODELS_BY_BRAND_LISTINGS_FAILED,
@@ -24,7 +25,7 @@ import {
     SET_ACTIVE_TAB,
     UPDATE_SEARCH_PARAMETERS
 } from "../action-types/listings";
-import { IParametersSearch, ListingsResponse} from "../../type/listings/listings";
+import {IParametersSearch, ListingsResponse, ListStatus} from "../../type/listings/listings";
 
 import {BodyType, Brand, Color, Drive, Engine, Model, Transmission} from "../../type/car/cars-details";
 
@@ -101,7 +102,19 @@ export type TGetColorsByModelListingsAction = IGetColorsByModelListingsAction | 
 export type TGetDrivesByModelListingsAction = IGetDrivesByModelListingsAction | IGetDrivesByModelListingsSuccessAction | IGetDrivesByModelListingsFailedAction;
 
 
+interface IGetListingsStatusesAction { readonly type: typeof GET_LISTINGS_STATUSES;}
+interface IGetListingsStatusesSuccessAction { readonly type: typeof GET_LISTINGS_STATUSES_SUCCEED; listing_statuses: ListStatus[];}
+interface IGetListingsStatusesFailedAction { readonly type: typeof GET_LISTINGS_STATUSES_FAILED;}
+
+interface IChangeListingStatusAction { readonly type: typeof CHANGE_LISTING_STATUS;}
+interface IChangeListingStatusSuccessAction { readonly type: typeof CHANGE_LISTING_STATUS_SUCCEED; statusList: ListStatus}
+interface IChangeListingStatusFailedAction { readonly type: typeof CHANGE_LISTING_STATUS_FAILED;}
+
+export type TGetListingsStatusesActions = IGetListingsStatusesAction | IGetListingsStatusesSuccessAction | IGetListingsStatusesFailedAction;
+export type TChangeListingStatusActions = IChangeListingStatusAction | IChangeListingStatusSuccessAction | IChangeListingStatusFailedAction;
+
 
 export type TListings = TGetListings | IUpdateSearchParametersAction | ISetActiveTabAction | TGetTransmissionsByModelListingsAction |
     TGetModelsByBrandListingsAction | TGetEnginesByModelListingsAction | TGetBrandsListingsAction |
-    TGetBodyTypesByModelListingsAction | TGetColorsByModelListingsAction | TGetDrivesByModelListingsAction | IResetModelsByBrandAction;
+    TGetBodyTypesByModelListingsAction | TGetColorsByModelListingsAction | TGetDrivesByModelListingsAction | IResetModelsByBrandAction
+    | TGetListingsStatusesActions | TChangeListingStatusActions;
