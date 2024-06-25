@@ -11,6 +11,8 @@ import {AppHeader} from "../header/header";
 import {ListingAddPage} from "../../pages/listings/listing-add-page";
 import {ListingsPage} from "../../pages/listings/listings-page";
 import {ListingShowPage} from "../../pages/listings/listings-show-page";
+import Roadmap from "../../pages/roadmap/roadmap-page";
+import TinderCard from "../../pages/tinder/tinder-page";
 
 
 function App() {
@@ -26,7 +28,7 @@ function App() {
             <AppHeader />
             <Routes>
                 <Route path='/chat' element={<OnlyAuth component={<Chat />} />}/>
-                <Route path='/' element={<HomePage />}/>
+                <Route path='/' element={<ListingsPage />}/>
                 <Route path='/login' element={<OnlyUnAuth component={<LoginPage />} />} />
                 <Route path='/register' element={<OnlyUnAuth component={<RegisterPage />} />} />
                 <Route path='/forgot-password' element={<OnlyUnAuth component={<ForgotPasswordPage />} />} />
@@ -40,6 +42,9 @@ function App() {
 
                 <Route path='/listings' element={<ListingsPage />} />
                 <Route path='/listing/:listingId' element={<ListingShowPage />} />
+
+                <Route path='/roadmap' element={<Roadmap />} />
+                <Route path='/tinder' element={<TinderCard />} />
 
                 <Route path='/*' element={<HomePage />}/>
             </Routes>

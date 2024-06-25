@@ -25,7 +25,7 @@ export const MobileFooter: FC = () => {
         >
             <BottomNavigationAction label="Поиск" icon={<SearchIcon />} style={ activeTab === 'search' ? {color: 'blue'} : {}}/>
             <BottomNavigationAction label="Объявления" icon={<DirectionsCarIcon />}  style={ activeTab === 'listings' ? {color: 'blue'} : {}}/>
-            <BottomNavigationAction label="Фильтры" icon={<FilterListIcon />}  style={ activeTab === 'sort' ? {color: 'blue'} : {}}/>
+            {/*<BottomNavigationAction label="Фильтры" icon={<FilterListIcon />}  style={ activeTab === 'sort' ? {color: 'blue'} : {}}/>*/}
         </BottomNavigation>
     );
 };

@@ -88,7 +88,7 @@ export interface IListingsList {
 
 }
 
-const ListingsInitialState : IListingsList = {
+export const ListingsInitialState : IListingsList = {
     parameters: {
         page:  "1",
         limit:  "15",
@@ -155,8 +155,8 @@ const ListingsInitialState : IListingsList = {
 export const listingsReducer = (state = ListingsInitialState, action: TListings) => {
     switch (action.type){
         case GET_LISTINGS: return {...state, listingsRequest: true};
-        case GET_LISTINGS_FAILURE: return {...state, error: action.error, listingsRequest: false};
-        case GET_LISTINGS_SUCCESS: return {...state, listingRequestFailed: true,
+        case GET_LISTINGS_FAILURE: return {...state, error: action.error, listingsRequest: false, listingRequestFailed: true};
+        case GET_LISTINGS_SUCCESS: return {...state, listingRequestFailed: false,
             listings: {
                 ...state.listings,
                 page: action.listings.page,

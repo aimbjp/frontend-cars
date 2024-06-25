@@ -212,7 +212,7 @@ export interface ICarDetails{
     modelColorAssociationError: boolean;
 }
 
-const initialState: ICarDetails = {
+export const initialState: ICarDetails = {
     brandAdd: false,
     brandAddSucceed: false,
     brandAddFailed: false,
@@ -573,7 +573,9 @@ export function carDetailsReducer (state = initialState, action: TActionCarDetai
         case ADD_MODEL_TRANSMISSION_ASSOCIATION_SUCCEED:
             return {...state, modelTransmissionAssociationAdding: false, modelTransmissionAssociationSuccess: true};
         case ADD_MODEL_TRANSMISSION_ASSOCIATION_FAILED:
-            return {...state, modelTransmissionAssociationAdding: false, modelTransmissionAssociationError: true};
+            return {...state, modelTransmissionAssociationAdding: false,
+                modelTransmissionAssociationError: true,
+                modelTransmissionAssociationSuccess: false,};
 
         case ADD_MODEL_COLOR_ASSOCIATION:
             return {...state, modelColorAssociationAdding: true};
