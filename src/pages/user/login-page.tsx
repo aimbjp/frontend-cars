@@ -16,7 +16,6 @@ import { PasswordInput, InputBase } from "../../components/input";
 import {ButtonResetRegister} from "../../components/button/reset-register-buttons";
 import {isEmailValid} from "../../services/functions/checkInputs/email";
 import {useDispatch, useSelector} from "../../services/hooks";
-import {CHECK_EMAIL_EXIST_SUCCESS} from "../../services/action-types/user";
 
 const defaultTheme = createTheme({
 });

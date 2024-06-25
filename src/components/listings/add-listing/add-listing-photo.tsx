@@ -103,6 +103,7 @@ export const AddListingPhoto: FC = () => {
                     Загрузить фото
                 </Button>
                 <input
+                    data-testid="file-input"
                     type="file"
                     multiple
                     onChange={handleFileChange}
@@ -125,8 +126,9 @@ export const AddListingPhoto: FC = () => {
                         <Box key={index} sx={{width: 100, height: 100, position: 'relative'}}>
                             <PreviewImage src={file.preview} alt="Preview"/>
                             <IconButton onClick={() => removeSelectedFile(index)} size="small"
+                                        data-testid={`delete-button-${index}`}
                                         sx={{position: 'absolute', top: 0, right: 0}}>
-                                <DeleteIcon/>
+                                <DeleteIcon />
                             </IconButton>
                         </Box>
                     ))}

@@ -26,6 +26,8 @@ const MobileFooter: React.FC<MobileFooterProps> = ({ onChatOpen, onCarPageOpen, 
     useEffect(() => {
         if (!chatOpen) {
             setActiveTab('listing');
+        } else if (chatOpen) {
+            setActiveTab('chat');
         }
     }, [chatOpen]);
 

@@ -3,6 +3,7 @@ import {addListing, setActiveBrand, setActivePhotos} from "../../../services/thu
 import {Box, Button, CircularProgress, TextField, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "../../../services/hooks";
 import {LoaderWithoutMargin} from "../../elements";
+import {Link} from "react-router-dom";
 
 
 export const AddListingAddButton: FC = () => {
@@ -51,6 +52,7 @@ export const AddListingAddButton: FC = () => {
                 gap: 2
             }}
         >
+            <Typography>Не нашли нужного авто? <Link to='/car/add-details'>Добавьте его.</Link></Typography>
         <Button onClick={() => {
             dispatch(addListing({
                 modelId: activeModel?.modelId || 1,

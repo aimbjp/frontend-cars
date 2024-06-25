@@ -16,28 +16,28 @@ export const ListingsPage: FC = () => {
             {isMobile ?
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
-                        {(activeTab === 'search') && <ListingsSearch/>}
+                        {(activeTab === 'search') && <ListingsSearch data-cy="listings-search"/>}
                     </Grid>
                     <Grid item xs={12} md={9} sx={{mb: 5}}>
-                        {activeTab === 'listings' && <Listings/>}
-                        {activeTab === 'sort' && <SortingOptions/>}
+                        {activeTab === 'listings' && <Listings data-cy="listings"/>}
+                        {/*{activeTab === 'sort' && <SortingOptions data-cy="sorting-options"/>}*/}
                     </Grid>
                     {isMobile && (
-                        <MobileFooter />
+                        <MobileFooter data-cy="mobile-footer"/>
                     )}
                 </Grid>
                 :
                 <Grid container spacing={2}
-                    sx={{
-                        p: 5
-                    }}
+                      sx={{
+                          p: 5
+                      }}
                 >
                     <Grid item xs={12} md={3}>
-                        <ListingsSearch />
+                        <ListingsSearch data-cy="listings-search"/>
                     </Grid>
                     <Grid item xs={12} md={9} sx={{gap: 4}}>
-                        <SortingOptions />
-                        <Listings />
+                        {/*<SortingOptions data-cy="sorting-options"/>*/}
+                        <Listings data-cy="listings"/>
                     </Grid>
                 </Grid>
             }

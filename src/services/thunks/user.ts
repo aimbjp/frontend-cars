@@ -476,6 +476,7 @@ export const resetPassword = (payload: IResetPassword,
 };
 
 export const checkEmailExist = (email: IForgotPassword): AppThunkAction => {
+
     return (dispatch: AppDispatch) => {
         dispatch({type: CHECK_EMAIL_EXIST});
 

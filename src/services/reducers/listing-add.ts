@@ -81,7 +81,7 @@ interface IListingState {
     activeImages: string[] | null;
 }
 
-const initialState: IListingState = {
+export const initialState: IListingState = {
     loading: false,
     listing: null,
     error: null,

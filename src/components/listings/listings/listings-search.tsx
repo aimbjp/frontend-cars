@@ -56,14 +56,11 @@ export const ListingsSearch: FC = () => {
         dispatch(setActiveTab('listings'));
     };
 
-
-
-
     return (
         <Box sx={{
             p: 2, boxShadow: '0 4px 8px rgba(0,0,0,0.1)', borderRadius: '16px', backgroundColor: 'white', m: 'auto', maxWidth: 900
-        }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>Параметры поиска</Typography>
+        }} data-cy="search-box">
+            <Typography variant="h5" sx={{ mb: 2 }} data-cy="search-title">Параметры поиска</Typography>
             <Grid container spacing={2}>
                 <Grid item xs={12} >
                     <Autocomplete
@@ -88,7 +85,7 @@ export const ListingsSearch: FC = () => {
                                 dispatch(resetModelsByBrandId());
                             }
                         }}
-                            renderInput={(params) => <TextField {...params} label="Бренд" />}
+                        renderInput={(params) => <TextField {...params} label="Бренд" data-cy="brand-input"/>}
                         value={brands.filter(brand => localSearchParams.brandIds?.includes(brand.brandId.toString()))}
                     />
                 </Grid>
@@ -113,48 +110,48 @@ export const ListingsSearch: FC = () => {
                                 dispatch(getColorsByModel(newValue.map(value => value.modelId.toString())));
                                 dispatch(getBodyTypesByModel(newValue.map(value => value.modelId.toString())));
                             }}
-                            renderInput={(params) => <TextField {...params} label="Модель" placeholder="Выберите Модель" />}
+                            renderInput={(params) => <TextField {...params} label="Модель" placeholder="Выберите Модель" data-cy="model-input"/>}
                         />
                     </Collapse>
                 </Grid>
                 <Grid item xs={12} md={24} container spacing={2}>
-                        <Autocomplete
-                            sx={{ width: '40%', p: 2 }}
-                            multiple
-                            options={ localSearchParams.modelIds?.length || 0 > 0 ? enginesByModel : engines }
-                            getOptionLabel={(option) => option.type}
-                            value={
-                                localSearchParams.modelIds?.length || 0 > 0 ? enginesByModel.filter(engineByModel => localSearchParams.engineTypes?.includes(engineByModel.type.toString()))
-                                    : engines.filter(engine => localSearchParams.engineTypes?.includes(engine.type.toString()))
-                            }
-                            onChange={(event, newValue) => {
-                                setLocalSearchParams(prev => ({
-                                    ...prev,
-                                    engineTypes: newValue.map(value => value.type.toString())
-                                }))
+                    <Autocomplete
+                        sx={{ width: '40%', p: 2 }}
+                        multiple
+                        options={ localSearchParams.modelIds?.length || 0 > 0 ? enginesByModel : engines }
+                        getOptionLabel={(option) => option.type}
+                        value={
+                            localSearchParams.modelIds?.length || 0 > 0 ? enginesByModel.filter(engineByModel => localSearchParams.engineTypes?.includes(engineByModel.type.toString()))
+                                : engines.filter(engine => localSearchParams.engineTypes?.includes(engine.type.toString()))
+                        }
+                        onChange={(event, newValue) => {
+                            setLocalSearchParams(prev => ({
+                                ...prev,
+                                engineTypes: newValue.map(value => value.type.toString())
+                            }))
 
-                                dispatch(updateSearchParameters({...localSearchParams, engineTypes: newValue.map(value => value.type.toString())}));
-                            }}
-                            renderInput={(params) => <TextField {...params} label="Двигатель" placeholder="Выберите Двигатель" />}
-                        />
-                        <Autocomplete
-                            sx={{ width: '40%', p: 2 }}
-                            multiple
-                            options={drives}
-                            getOptionLabel={(option) => option.type}
-                            value={
-                                localSearchParams.modelIds?.length || 0 > 0 ? drivesByModel.filter(engineByModel => localSearchParams.driveTypes?.includes(engineByModel.type.toString()))
-                                    : drives.filter(engine => localSearchParams.driveTypes?.includes(engine.type.toString()))
-                            }
-                            onChange={(event, newValue) => {
-                                setLocalSearchParams(prev => ({
-                                    ...prev,
-                                    driveTypes: newValue.map(value => value.type.toString())
-                                }));
-                                dispatch(updateSearchParameters({...localSearchParams, driveTypes: newValue.map(value => value.type.toString())}));
-                            }}
-                            renderInput={(params) => <TextField {...params} label="Привод" placeholder="Выберите Привод" />}
-                        />
+                            dispatch(updateSearchParameters({...localSearchParams, engineTypes: newValue.map(value => value.type.toString())}));
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Двигатель" placeholder="Выберите Двигатель" data-cy="engine-input"/>}
+                    />
+                    <Autocomplete
+                        sx={{ width: '40%', p: 2 }}
+                        multiple
+                        options={drives}
+                        getOptionLabel={(option) => option.type}
+                        value={
+                            localSearchParams.modelIds?.length || 0 > 0 ? drivesByModel.filter(engineByModel => localSearchParams.driveTypes?.includes(engineByModel.type.toString()))
+                                : drives.filter(engine => localSearchParams.driveTypes?.includes(engine.type.toString()))
+                        }
+                        onChange={(event, newValue) => {
+                            setLocalSearchParams(prev => ({
+                                ...prev,
+                                driveTypes: newValue.map(value => value.type.toString())
+                            }));
+                            dispatch(updateSearchParameters({...localSearchParams, driveTypes: newValue.map(value => value.type.toString())}));
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Привод" placeholder="Выберите Привод" data-cy="drive-input"/>}
+                    />
                 </Grid>
 
                 <Grid item xs={12} md={24} container spacing={2}>
@@ -164,8 +161,8 @@ export const ListingsSearch: FC = () => {
                         options={bodyTypes}
                         getOptionLabel={(option) => option.type}
                         value={
-                                localSearchParams.modelIds?.length || 0 > 0 ? bodyTypesByModel.filter(engineByModel => localSearchParams.bodyTypeIds?.includes(engineByModel.bodyTypeId.toString()))
-                                    : bodyTypes.filter(engine => localSearchParams.bodyTypeIds?.includes(engine.bodyTypeId.toString()))
+                            localSearchParams.modelIds?.length || 0 > 0 ? bodyTypesByModel.filter(engineByModel => localSearchParams.bodyTypeIds?.includes(engineByModel.bodyTypeId.toString()))
+                                : bodyTypes.filter(engine => localSearchParams.bodyTypeIds?.includes(engine.bodyTypeId.toString()))
                         }
                         onChange={(event, newValue) => {
                             setLocalSearchParams(prev => ({
@@ -174,7 +171,7 @@ export const ListingsSearch: FC = () => {
                             }));
                             dispatch(updateSearchParameters({...localSearchParams, bodyTypeIds: newValue.map(value => value.bodyTypeId.toString())}));
                         }}
-                        renderInput={(params) => <TextField {...params} label="Тип кузова" placeholder="Выберите тип кузова" />}
+                        renderInput={(params) => <TextField {...params} label="Тип кузова" placeholder="Выберите тип кузова" data-cy="body-input"/>}
                     />
 
                     <Autocomplete
@@ -193,7 +190,7 @@ export const ListingsSearch: FC = () => {
                             }));
                             dispatch(updateSearchParameters({...localSearchParams, transmissionTypes: newValue.map(value => value.transmissionId.toString())}));
                         }}
-                        renderInput={(params) => <TextField {...params} label="Коробка передач" placeholder="Выберите коробку передач" />}
+                        renderInput={(params) => <TextField {...params} label="Коробка передач" placeholder="Выберите коробку передач" data-cy="transmission-input"/>}
                     />
                 </Grid>
 
@@ -215,7 +212,7 @@ export const ListingsSearch: FC = () => {
                             }));
                             dispatch(updateSearchParameters({...localSearchParams, colorIds: newValue.map(value => value.colorId.toString())}));
                         }}
-                        renderInput={(params) => <TextField {...params} label="Цвет" placeholder="Выберите цвет" />}
+                        renderInput={(params) => <TextField {...params} label="Цвет" placeholder="Выберите цвет" data-cy="color-input"/>}
                     />
                     <TextField
                         sx={{ width: '50%', m: 2 }}
@@ -224,6 +221,7 @@ export const ListingsSearch: FC = () => {
                         type="string"
                         onChange={handleInputChange}
                         value={localSearchParams.places || ''}
+                        data-cy="places-input"
                     />
                 </Grid>
 
@@ -238,6 +236,7 @@ export const ListingsSearch: FC = () => {
                         type="number"
                         onChange={handleInputChange}
                         value={localSearchParams.priceMin || ''}
+                        data-cy="price-min-input"
                     />
                     <TextField
                         sx={{
@@ -249,18 +248,18 @@ export const ListingsSearch: FC = () => {
                         type="number"
                         onChange={handleInputChange}
                         value={localSearchParams.priceMax || ''}
+                        data-cy="price-max-input"
                     />
                 </Grid>
             </Grid>
 
-            <Box sx={{display: 'grid', justifyContent: 'center'}}>
-                {listings && <Typography>Всего объявллений: {listings.total}</Typography>}
+            <Box sx={{display: 'grid', justifyContent: 'center'}} data-cy="listings-box">
+                {listings && <Typography data-cy="total-listings">Всего объявлений: {listings.total}</Typography>}
 
-                {isMobile && <Button variant="contained" color="primary" onClick={handleSubmit}>
+                {isMobile && <Button variant="contained" color="primary" onClick={handleSubmit} data-cy="search-button">
                     Поиск
                 </Button>}
             </Box>
         </Box>
-
     );
 };
