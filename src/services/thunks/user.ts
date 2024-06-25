@@ -315,7 +315,8 @@ export function register (payload: IRegister) : AppThunkAction{
                         type: REGISTER_SUCCESS,
                         email: res.user.email,
                         name: res.user.name,
-                        username: res.user.username
+                        userId: res.user.id,
+                        username: res.user.username,
                     });
 
                     localStorage.setItem("refreshToken", res.refreshToken);
@@ -341,6 +342,7 @@ export function login (payload: ILogin): AppThunkAction {
                     dispatch({
                         type: AUTHORIZATION_SUCCESS,
                         email: res.user.email,
+                        userId: res.user.id,
                         name: res.user.name,
                         username: res.user.username
                     });
@@ -392,14 +394,15 @@ export function getUserInfo (): AppThunkAction {
                     type: GET_USER_INFO_SUCCESS,
                     email: res.user.email,
                     name: res.user.name,
-                    username: res.user.username
+                    username: res.user.username,
+                    userId: res.user.id,
+
                 });
             } else {
                 dispatch({type: GET_USER_INFO_FAILED});
             }
         } catch (error) {
             dispatch({type: GET_USER_INFO_FAILED});
-            throw error;
         }
     }
 }
@@ -415,7 +418,8 @@ export function updateUserInfo (payload: IProfileForm): AppThunkAction {
                         type: UPDATE_USER_INFO_SUCCESS,
                         email: res.user.email,
                         name: res.user.name,
-                        username: res.user.username
+                        userId: res.user.id,
+                        username: res.user.username,
                     })
                 }
                 else{

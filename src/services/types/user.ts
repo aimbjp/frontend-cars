@@ -55,6 +55,7 @@ export interface IRegisterSuccessAction {
     readonly type: typeof REGISTER_SUCCESS;
     email: string;
     name: string;
+    userId?: string;
     username: string;
 }
 export interface IRegisterFailedAction {
@@ -68,6 +69,7 @@ export interface IAuthorizationSuccessAction {
     readonly type: typeof AUTHORIZATION_SUCCESS;
     email: string;
     name: string;
+    userId?: string;
     username: string;
 }
 export interface IAuthorizationFailedAction {
@@ -102,6 +104,7 @@ export interface IGetUserInfoSuccessAction {
     email: string;
     name: string;
     username: string;
+    userId?: string;
 }
 export interface IGetUserInfoFailedAction {
     readonly type: typeof GET_USER_INFO_FAILED;
@@ -114,6 +117,7 @@ export interface IUpdateUserInfoSuccessAction {
     readonly type: typeof UPDATE_USER_INFO_SUCCESS;
     email: string;
     name: string;
+    userId?: string;
     username: string;
 }
 export interface IUpdateUserInfoFailedAction {

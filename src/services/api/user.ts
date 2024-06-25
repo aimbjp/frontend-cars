@@ -7,9 +7,9 @@ import {
     IRegister,
     IResetPassword
 } from "../../type/user/user-types";
-// const URL_API = 'http://localhost:3000/api';
+import {URL_API} from "./links";
+import {ApiError} from "../../type/api";
 
-const URL_API = '/api';
 
 const checkResponse = (res: Response): Promise<any> => {
     return res.ok ? res.json() : res.json().then((err: any) => Promise.reject(err));
@@ -30,45 +30,64 @@ export const refreshToken = () => {
             if (!refreshData.success) {
                 return Promise.reject(refreshData);
             }
-            localStorage.setItem("refreshToken", refreshData.refreshToken);
             localStorage.setItem("accessToken", refreshData.accessToken);
             return refreshData;
         });
 };
 
-async function request(url: string, options?: RequestInit | undefined) {
+export async function request(url: string, options?: RequestInit) {
     url = URL_API + url;
 
     try {
         const res = await fetch(url, options);
         return await checkResponse(res);
-    } catch (err: any) {
-        if (err.message === "jwt expired") {
+    } catch (err: unknown) {
+        const errorMessage = typeof err === "object" && err !== null && "error" in err ? (err as ApiError).error : '';
+
+        console.log(errorMessage);
+
+        if (errorMessage === "jwt expired" ) { //  || errorMessage === "jwt invalid"
             const refreshData = await refreshToken(); // Обновляем токен
 
             if (!options) {
-                options = {};
+                options = { headers: {} };
             }
 
+            // Устанавливаем заголовок Authorization с обновленным токеном
             if (!options.headers) {
-                options.headers = new Headers();
+                options.headers = {};
             }
 
             if (options.headers instanceof Headers) {
-                options.headers.set('authorization', `Bearer ${refreshData.accessToken}`);
+                options.headers.set('Authorization', `Bearer ${refreshData.accessToken}`);
             } else if (Array.isArray(options.headers)) {
-                options.headers.push(['authorization', `Bearer ${refreshData.accessToken}`]);
+                // Находим индекс существующего заголовка Authorization, если он есть
+                const authHeaderIndex = options.headers.findIndex(header => header[0] === 'Authorization');
+                if (authHeaderIndex !== -1) {
+                    // Обновляем существующий заголовок
+                    options.headers[authHeaderIndex] = ['Authorization', `Bearer ${refreshData.accessToken}`];
+                } else {
+                    // Добавляем новый заголовок
+                    options.headers.push(['Authorization', `Bearer ${refreshData.accessToken}`]);
+                }
             } else {
-                options.headers['authorization'] = `Bearer ${refreshData.accessToken}`;
+                // Для объектов Record<string, string>
+                if ( !options.headers['Authorization'] ){
+                    options.headers['Authorization'] = `Bearer ${refreshData.accessToken}`;
+                }
             }
 
             const res = await fetch(url, options);
             return await checkResponse(res);
         } else {
-            return Promise.reject(err);
+            // Если ошибка не связана с JWT
+            return err;//Promise.reject(err);
         }
     }
 }
+
+
+
 
 export const fetchForgotPassword = (email: IForgotPassword) => {
     return request(`/auth/request-password-reset`, {
@@ -125,7 +144,7 @@ export const fetchGetUserInfo = () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
+            'Authorization': 'Barear '+ localStorage.getItem('accessToken') || '',
         },
     })
 }
@@ -135,7 +154,7 @@ export const fetchUpdateUserInfo = (payload: IProfileForm) => {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
+            'Authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
         body: JSON.stringify(payload),
     })
@@ -146,7 +165,7 @@ export const fetchChangePassword = (payload: IChangePassword) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
+            'Authorization': 'Barear ' + localStorage.getItem('accessToken') || '',
         },
         body: JSON.stringify(payload),
     })
